@@ -14,7 +14,8 @@ COMPILE = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = $(SRCD)reader.c
+SRC =	$(SRCD)reader.c \
+		$(SRCD)ft_split2.c
 
 OBJ = $(SRC:.c=.o)
 

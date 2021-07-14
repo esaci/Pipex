@@ -1,35 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libpip.h                                           :+:      :+:    :+:   */
+/*   stopper.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/12 14:38:47 by esaci             #+#    #+#             */
-/*   Updated: 2021/07/12 14:38:49 by esaci            ###   ########.fr       */
+/*   Created: 2021/07/14 14:40:14 by esaci             #+#    #+#             */
+/*   Updated: 2021/07/14 14:40:15 by esaci            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../lib/libpip.h"
 
-#ifndef LIBPIP_H
-# define LIBPIP_H
-
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/uio.h>
-# include <unistd.h>
-# include <sys/wait.h>
-# include <stdio.h>
-# include <string.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include "./libft/libft.h"
-typedef struct s_pip
-{
-	char	*ptr[4];
-}	t_pip;
-
-int			ft_reader(t_pip *pip);
-void		ft_split2(char **s);
-
-#endif
+void	ft_stop()

@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libpip.h                                           :+:      :+:    :+:   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/12 14:38:47 by esaci             #+#    #+#             */
-/*   Updated: 2021/07/12 14:38:49 by esaci            ###   ########.fr       */
+/*   Created: 2019/11/18 10:51:13 by esaci             #+#    #+#             */
+/*   Updated: 2019/11/25 21:24:54 by esaci            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../lib/libpip.h"
 
-#ifndef LIBPIP_H
-# define LIBPIP_H
-
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/uio.h>
-# include <unistd.h>
-# include <sys/wait.h>
-# include <stdio.h>
-# include <string.h>
-# include <stdlib.h>
-# include <fcntl.h>
-# include "./libft/libft.h"
-typedef struct s_pip
+void	ft_split2(char **s)
 {
-	char	*ptr[4];
-}	t_pip;
+	int		count;
 
-int			ft_reader(t_pip *pip);
-void		ft_split2(char **s);
-
-#endif
+	count = 0;
+	while(s[count])
+	{
+		s[count] = ft_strjoin("-", s[count]);
+		count++;
+	}
+	s[count] = NULL;
+}
