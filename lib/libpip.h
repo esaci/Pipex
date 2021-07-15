@@ -24,12 +24,16 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include "./libft/libft.h"
+# include "./GNL/get_next_line.h"
 typedef struct s_pip
 {
 	char	*ptr[4];
 }	t_pip;
 
 int			ft_reader(t_pip *pip);
-void		ft_split2(char **s);
-
+char		**ft_split2(char **s, t_pip *pip, int fdindex);
+void		ft_stop(t_pip *pip, char *str);
+pid_t		forker(t_pip *pip);
+void		full_free(char **str);
+void																					koi(char *str);
 #endif

@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stopper.c                                          :+:      :+:    :+:   */
+/*   forker.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/14 14:40:14 by esaci             #+#    #+#             */
-/*   Updated: 2021/07/14 14:40:15 by esaci            ###   ########.fr       */
+/*   Created: 2021/07/15 14:18:38 by esaci             #+#    #+#             */
+/*   Updated: 2021/07/15 14:18:40 by esaci            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib/libpip.h"
 
-void	ft_stop(t_pip *pip, char *str)
+pid_t	forker(t_pip *pip)
 {
-	int	count;
+	pid_t pid;
 
-	count = 0;
-	while (pip->ptr[count])
+
+	pid = fork();
+	if(pid == -1)
 	{
-		count++;
+		printf("fork a echoue \n");
+		ft_stop(pip, "pid");
 	}
-	printf("%s est le msg d'erreur\n", str);
-	exit(1);
+	else if (pid == 0)
+		printf("pid vaut 0, un child processus a ete cree\n");
+	else
+		printf("pid vaut %d et pas compris \n", pid);
+	return (pid);
 }
+

@@ -8,14 +8,20 @@ PIP = libpip.a
 
 PIPD = ./lib/
 
+GNLD = ./lib/GNL/
+
 SRCD = ./srcs/
 
 COMPILE = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC =	$(SRCD)reader.c \
-		$(SRCD)ft_split2.c
+SRC =	$(GNLD)get_next_line.c \
+		$(GNLD)get_next_line_utils.c \
+		$(SRCD)reader.c \
+		$(SRCD)ft_split2.c \
+		$(SRCD)stopper.c \
+		$(SRCD)forker.c
 
 OBJ = $(SRC:.c=.o)
 

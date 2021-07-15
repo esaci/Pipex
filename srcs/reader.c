@@ -12,7 +12,12 @@
 
 #include "../lib/libpip.h"
 
-char	**arg_listeur(t_pip *pip, int index)
+void	koi(char *str)
+{
+	printf("La phrase:\n%s|\n", str);
+}
+
+char	**arg_listeur(t_pip *pip, int index, int fdindex)
 {
 	char	**ptr;
 	int		count;
@@ -20,23 +25,23 @@ char	**arg_listeur(t_pip *pip, int index)
 	count = 0;
 	while (pip->ptr[index][count])
 	{
-		if (pip->ptr[index][count] == '-')
+		if (pip->ptr[index][count] == ' ')
 			break ;
 		count++;
 	}
 	if (pip->ptr[index][count])
-	{
-		ptr = ft_split(pip->ptr[index] , '-');
-		ft_split2(ptr + 1);
-	}
+		ptr = ft_split(pip->ptr[index] , ' ');
 	else
 	{
 		ptr = malloc(sizeof(char *) * 2);
 		ptr[0] = pip->ptr[index];
 		ptr[1] = NULL;
 	}
+	ptr = ft_split2(ptr, pip, fdindex);
 	return (ptr);
 }
+
+
 
 int	ft_reader(t_pip *pip)
 {
@@ -44,11 +49,15 @@ int	ft_reader(t_pip *pip)
 	char	**arg_list;
 	char	*ptr;
 
+
 	fd[0] = open(pip->ptr[0], O_RDONLY);
 	fd[1] = open(pip->ptr[3], O_RDWR);
-	arg_list = arg_listeur(pip, 1);
+	arg_list = arg_listeur(pip, 1, 0);
 	if (pipe(fd) == -1)
-		return (0);
+	{
+		printf("pipe a echoue \n");
+		ft_stop(pip, "fork");
+	}
 	ptr = ft_strjoin("/bin/", arg_list[0]);
 	arg_list[0] = ft_strjoin("/bin/", arg_list[0]);
 	int count = 0;
@@ -57,7 +66,9 @@ int	ft_reader(t_pip *pip)
 		printf("arg_list[%d] vaut %s\n", count, arg_list[count]);
 		count++;
 	}
-	printf("ptr vaut %s\n", ptr);
-	execv("/bin/ls", NULL);
+/* 	if (ft_strncmp("/bin/cat", ptr, ft_strlen(ptr)))
+		printf("ptr vaut %s\nptr vaut %s\n et %zu vs %zu\n", ptr, "/bin/ls", ft_strlen(ptr), ft_strlen("/bin/ls")); */
+	printf("------------------------\n");
+	execv(ptr, arg_list);
 	return (0);
 }
