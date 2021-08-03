@@ -35,5 +35,6 @@ char		**ft_split2(char **s, t_pip *pip, int fdindex);
 void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);
 void		full_free(char **str);
+pid_t		ft_executeur(char *ptr, char **arg_list, t_pip *pip);
 void																					koi(char *str);
 #endif

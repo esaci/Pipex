@@ -21,7 +21,8 @@ SRC =	$(GNLD)get_next_line.c \
 		$(SRCD)reader.c \
 		$(SRCD)ft_split2.c \
 		$(SRCD)stopper.c \
-		$(SRCD)forker.c
+		$(SRCD)forker.c \
+		$(SRCD)executeur.c
 
 OBJ = $(SRC:.c=.o)
 

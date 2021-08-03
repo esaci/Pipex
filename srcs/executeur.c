@@ -1,42 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_executeur.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/12 13:17:57 by esaci             #+#    #+#             */
-/*   Updated: 2021/07/12 13:17:58 by esaci            ###   ########.fr       */
+/*   Created: 2021/08/03 14:26:22 by esaci             #+#    #+#             */
+/*   Updated: 2021/08/03 14:26:24 by esaci            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib/libpip.h"
 
-void	init_pip(t_pip *pip, char **argv)
+
+pid_t		ft_executeur(char *ptr, char **arg_list, t_pip *pip)
 {
-	int	count;
+	pid_t	pid;
 
-	count = 0;
-	while (count < 4)
-	{
-		pip->ptr[count] = argv[count + 1];
-		count++;
-	}
+	pid = forker(pip);
+	if (pid == 0)
+		execv(ptr, arg_list);
+	else
+		koi("faut setup arg_list2");
+	return (pid);
 }
-
-int	main(int argc, char **argv)
-{
-	t_pip	pip;
-	int		count;
-
-
-	if (argc < 5)
-	{
-		printf("\nIl manque des arguments (%d/5)\n", argc);
-		return (0);
-	}
-	init_pip(&pip, argv);
-	count = ft_reader(&pip);
-	return (0);
-}
-

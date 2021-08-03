@@ -14,7 +14,7 @@
 
 void	koi(char *str)
 {
-	printf("La phrase:\n%s|\n", str);
+	printf("|%s|\n", str);
 }
 
 char	**arg_listeur(t_pip *pip, int index, int fdindex)
@@ -48,7 +48,7 @@ int	ft_reader(t_pip *pip)
 	int		fd[2];
 	char	**arg_list;
 	char	*ptr;
-
+	pid_t	pid;
 
 	fd[0] = open(pip->ptr[0], O_RDONLY);
 	fd[1] = open(pip->ptr[3], O_RDWR);
@@ -62,13 +62,8 @@ int	ft_reader(t_pip *pip)
 	arg_list[0] = ft_strjoin("/bin/", arg_list[0]);
 	int count = 0;
 	while(arg_list[count])
-	{
-		printf("arg_list[%d] vaut %s\n", count, arg_list[count]);
-		count++;
-	}
-/* 	if (ft_strncmp("/bin/cat", ptr, ft_strlen(ptr)))
-		printf("ptr vaut %s\nptr vaut %s\n et %zu vs %zu\n", ptr, "/bin/ls", ft_strlen(ptr), ft_strlen("/bin/ls")); */
+		koi(arg_list[count++]);
 	printf("------------------------\n");
-	execv(ptr, arg_list);
+	pid = ft_executeur(ptr, arg_list, pip);
 	return (0);
 }
