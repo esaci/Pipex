@@ -17,7 +17,7 @@ void	koi(char *str)
 	printf("|%s|\n", str);
 }
 
-char	**arg_listeur(t_pip *pip, int index, int fdindex, char *ptr)
+char	**arg_listeur(t_pip *pip, int index)
 {
 	char	**ptr;
 	int		count;
@@ -37,7 +37,7 @@ char	**arg_listeur(t_pip *pip, int index, int fdindex, char *ptr)
 		ptr[0] = pip->ptr[index];
 		ptr[1] = NULL;
 	}
-	ptr = ft_split2(ptr, pip, fdindex);
+	ptr = ft_split2(ptr, pip, "test");
 	return (ptr);
 }
 
@@ -51,7 +51,6 @@ int	file_reader(int tmp, int mode, int fd)
 	{
 		while((res = get_next_line(fd, &ptr)) > 0)
 		{
-			koi(ptr);
 			free(ptr);
 		}
 	}
@@ -60,37 +59,31 @@ int	file_reader(int tmp, int mode, int fd)
 
 int	ft_reader(t_pip *pip, int index, int fdindex)
 {
-	int		fd[2];
 	char	**arg_list;
 	char	*ptr;
-	pid_t	pid;
 	int		tmp;
 
-	fd[1] = open(pip->ptr[3], O_RDWR);
-	fd[0] = open(pip->ptr[0], O_RDONLY);
-	tmp = access(pip->ptr[fdindex],R_OK);
-	tmp = file_reader(tmp, fdindex, fd[0]);
-	arg_list = arg_listeur(pip, index, fdindex);
-	if (pipe(fd) == -1)
-	{
-		printf("pipe a echoue \n");
-		ft_stop(pip, "fork");
-	}
+
+	arg_list = arg_listeur(pip, index);
 	ptr = ft_strjoin("/bin/", arg_list[0]);
 	arg_list[0] = ft_strjoin("/bin/", arg_list[0]);
+	ft_piper(pip, fdindex);
 	if (index == 1)
-		pid = ft_executeur(pip);
-	if (index == 1 && pid == 0)
+		pip->pid[0] = ft_executeur(pip);
+	else
+		pip->pid[1] = ft_executeur(pip);
+	if (index == 1 && pip->pid[1] == 0 && pip->pid[0] != 0)
 		return (ft_reader(pip, 2, 3));
-	int count = 0;
+/* 	int count = 0;
 	while(arg_list[count])
 		koi(arg_list[count++]);
-	printf("------------------------\n");
-	tmp = execv(ptr, arg_list);
-	if (tmp < 0)
+	printf("------------------------\n"); */
+	if (pip->pid[0] != 0)
+		tmp = execv(ptr, arg_list);
+/* 	if (tmp < 0)
 	{
 		perror("ERROR: ");
 		return (-1);
-	}
+	} */
 	return (0);
 }

@@ -30,6 +30,9 @@ typedef struct s_pip
 {
 	char	*ptr[4];
 	int		errnum;
+	pid_t	pid[2];
+	int		fd[2];
+	int		tmp[2];
 }	t_pip;
 
 extern int errno ;
@@ -39,5 +42,7 @@ void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);
 void		full_free(char **str);
 pid_t		ft_executeur(t_pip *pip);
+int			ft_piper(t_pip *pip, int fdindex);
+int			file_reader(int tmp, int mode, int fd);
 void																					koi(char *str);
 #endif
