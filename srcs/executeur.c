@@ -13,14 +13,10 @@
 #include "../lib/libpip.h"
 
 
-pid_t		ft_executeur(char *ptr, char **arg_list, t_pip *pip)
+pid_t		ft_executeur(t_pip *pip)
 {
 	pid_t	pid;
 
 	pid = forker(pip);
-	if (pid == 0)
-		execv(ptr, arg_list);
-	else
-		koi("faut setup arg_list2");
 	return (pid);
 }

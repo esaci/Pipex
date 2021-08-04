@@ -42,7 +42,7 @@ void	full_free(char **str)
 	free(str);
 }
 
-char	**ft_split2(char **s, t_pip *pip, int fdindex)
+char	**ft_split2(char **s, t_pip *pip, char *ptr)
 {
 	int		count;
 	char	**d;
@@ -60,7 +60,7 @@ char	**ft_split2(char **s, t_pip *pip, int fdindex)
 		d[count2] = s[count2];
 		count2++;
 	}
-	d[count2] = pip->ptr[fdindex];
+	d[count2] = ptr;
 	count2++;
 	d[count2] = NULL;
 	s = d;

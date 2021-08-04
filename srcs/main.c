@@ -36,7 +36,7 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	init_pip(&pip, argv);
-	count = ft_reader(&pip);
+	count = ft_reader(&pip, 1, 0);
 	return (0);
 }
 

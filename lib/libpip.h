@@ -23,18 +23,21 @@
 # include <string.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <errno.h>
 # include "./libft/libft.h"
 # include "./GNL/get_next_line.h"
 typedef struct s_pip
 {
 	char	*ptr[4];
+	int		errnum;
 }	t_pip;
 
-int			ft_reader(t_pip *pip);
-char		**ft_split2(char **s, t_pip *pip, int fdindex);
+extern int errno ;
+int			ft_reader(t_pip *pip, int index, int fdindex);
+char		**ft_split2(char **s, t_pip *pip, char *ptr);
 void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);
 void		full_free(char **str);
-pid_t		ft_executeur(char *ptr, char **arg_list, t_pip *pip);
+pid_t		ft_executeur(t_pip *pip);
 void																					koi(char *str);
 #endif
