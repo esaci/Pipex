@@ -47,6 +47,13 @@ int	main(int argc, char **argv, char **envp)
 		printf("\nIl manque des arguments (%d/5)\n", argc);
 		return (0);
 	}
+	count = 0;
+	while (envp[count])
+	{
+		if (!ft_memcmp(envp[count], "PATH", 4))
+			pip.pathptr = ft_split(envp[count] + 5, ':');
+		count++;
+	}
 	init_pip(&pip, argv);
 	count = ft_reader(&pip, 1, 0, envp);
 	return (0);

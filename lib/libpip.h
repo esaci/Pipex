@@ -33,6 +33,7 @@ typedef struct s_pip
 	pid_t	pid[2];
 	int		fd[2];
 	int		tmp[2];
+	char	**pathptr;
 }	t_pip;
 
 extern int errno ;

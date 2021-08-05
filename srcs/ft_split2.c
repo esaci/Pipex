@@ -25,7 +25,6 @@ char	*copieur(char *s)
 		count++;
 	}
 	str[count] = 0;
-	free(s);
 	return(str);
 }
 
@@ -54,10 +53,20 @@ char	**ft_split2(char **s, t_pip *pip, char *ptr)
 	d = malloc(sizeof(char*) * (count + 2));
 	if (!d)
 		ft_stop(pip, "okok");
-	count2 = 0;
-	while(count2 < count)
+	d[0] = malloc(sizeof(char) * (ft_strlen(s[0]) + 2));
+	count = 0;
+	while (s[0][count])
 	{
-		d[count2] = s[count2];
+		d[0][count + 1] = s[0][count];
+		count++;
+	}
+	d[0][0] = '/';
+	count++;
+	d[0][count] = 0;
+	count2 = 1;
+	while(s[count2])
+	{
+		d[count2] = copieur(s[count2]);
 		count2++;
 	}
 	d[count2] = ptr;

@@ -57,31 +57,51 @@ int	file_reader(int tmp, int mode, int fd)
 	return (0);
 }
 
+char	*parse_path(char **arg_list, t_pip *pip)
+{
+	int		count;
+	int		tmp;
+	char	*ptr;
+
+	count = 0;
+	tmp = 1;
+	while (pip->pathptr[count] && tmp != 0)
+	{
+		ptr = ft_strjoin(pip->pathptr[count], arg_list[0]);
+		tmp = access(ptr ,X_OK);
+		if (tmp != 0)
+			free(ptr);
+		count++;
+	}
+	if (tmp == 0)
+		return (ptr);
+	return(arg_list[0]);
+}
+
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
 
 
-	arg_list = arg_listeur(pip, index);
-	/* arg_list[0] = ft_strjoin("/bin/", arg_list[0]); */
 	ft_piper(pip, fdindex);
 	if (index == 1)
 		pip->pid[0] = ft_executeur(pip);
 	else
 		pip->pid[1] = ft_executeur(pip);
-	if (index == 1 && pip->pid[1] == 0 && pip->pid[0] != 0)
+	if (index == 1)
 		return (ft_reader(pip, 2, 3, envp));
-	char *argt[] = {"ls", "-l", "-h", "-a", NULL};
+	printf("les combinaison sont pip[0]:%d pip[1]:%d index:%d\n", pip->pid[0],pip->pid[1], index);
+	arg_list = arg_listeur(pip, index);
 	if (pip->pid[0] != 0)
 	{
+		arg_list[0] = parse_path(arg_list, pip);
 		printf("------------------------\n");
 		int count = 0;
-		while(argt[count])
-			koi(argt[count++]);
+		while(arg_list[count])
+			koi(arg_list[count++]);
 		printf("------------------------\n");
-		/* tmp = execv(arg_list[0], arg_list); */
-		tmp = execve(argt[0], argt, envp);
+		tmp = execve(arg_list[0], arg_list, envp);
 		if (tmp < 0)
 		{
 			arg_list[0] = strerror(errno);
