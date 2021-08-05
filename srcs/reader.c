@@ -57,33 +57,37 @@ int	file_reader(int tmp, int mode, int fd)
 	return (0);
 }
 
-int	ft_reader(t_pip *pip, int index, int fdindex)
+int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
-	char	*ptr;
 	int		tmp;
 
 
 	arg_list = arg_listeur(pip, index);
-	ptr = ft_strjoin("/bin/", arg_list[0]);
-	arg_list[0] = ft_strjoin("/bin/", arg_list[0]);
+	/* arg_list[0] = ft_strjoin("/bin/", arg_list[0]); */
 	ft_piper(pip, fdindex);
 	if (index == 1)
 		pip->pid[0] = ft_executeur(pip);
 	else
 		pip->pid[1] = ft_executeur(pip);
 	if (index == 1 && pip->pid[1] == 0 && pip->pid[0] != 0)
-		return (ft_reader(pip, 2, 3));
-/* 	int count = 0;
-	while(arg_list[count])
-		koi(arg_list[count++]);
-	printf("------------------------\n"); */
+		return (ft_reader(pip, 2, 3, envp));
+	char *argt[] = {"ls", "-l", "-h", "-a", NULL};
 	if (pip->pid[0] != 0)
-		tmp = execv(ptr, arg_list);
-/* 	if (tmp < 0)
 	{
-		perror("ERROR: ");
-		return (-1);
-	} */
+		printf("------------------------\n");
+		int count = 0;
+		while(argt[count])
+			koi(argt[count++]);
+		printf("------------------------\n");
+		/* tmp = execv(arg_list[0], arg_list); */
+		tmp = execve(argt[0], argt, envp);
+		if (tmp < 0)
+		{
+			arg_list[0] = strerror(errno);
+			perror(arg_list[0]);
+			return (-1);
+		}
+	}
 	return (0);
 }

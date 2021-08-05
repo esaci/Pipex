@@ -36,7 +36,7 @@ typedef struct s_pip
 }	t_pip;
 
 extern int errno ;
-int			ft_reader(t_pip *pip, int index, int fdindex);
+int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
 char		**ft_split2(char **s, t_pip *pip, char *ptr);
 void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);

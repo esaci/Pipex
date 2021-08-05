@@ -47,15 +47,8 @@ int	main(int argc, char **argv, char **envp)
 		printf("\nIl manque des arguments (%d/5)\n", argc);
 		return (0);
 	}
-	count = 0;
-	while (envp[count])
-	{
-		printf("%s\n",envp[count]);
-		count++;
-	}
-	return 0;
 	init_pip(&pip, argv);
-	count = ft_reader(&pip, 1, 0);
+	count = ft_reader(&pip, 1, 0, envp);
 	return (0);
 }
 
