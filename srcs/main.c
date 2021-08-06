@@ -25,14 +25,14 @@ void	init_pip(t_pip *pip, char **argv)
 	count = 0;
 	while (count < 2)
 	{
-		pip->pid[count] = 0;
+		pip->pid[count] = 'e';
 		count++;
 	}
 	pip->tmp[0] = access(pip->ptr[0],R_OK);
-	if (pip->tmp[0] > 0)
+	if (pip->tmp[0] == 0)
 		pip->fd[0] = open(pip->ptr[0], O_RDONLY);
 	pip->tmp[1] = access(pip->ptr[3], W_OK);
-	if (pip->tmp[1] > 0)
+	if (pip->tmp[1] == 0)
 		pip->fd[1] = open(pip->ptr[3], O_RDWR);
 }
 
@@ -56,6 +56,8 @@ int	main(int argc, char **argv, char **envp)
 	}
 	init_pip(&pip, argv);
 	count = ft_reader(&pip, 1, 0, envp);
+	if (count == -1)
+		return (0);
 	return (0);
 }
 

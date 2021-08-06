@@ -38,12 +38,12 @@ typedef struct s_pip
 
 extern int errno ;
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
-char		**ft_split2(char **s, t_pip *pip, char *ptr);
+char		**ft_split2(char **s, t_pip *pip, int index);
 void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);
 void		full_free(char **str);
 pid_t		ft_executeur(t_pip *pip);
-int			ft_piper(t_pip *pip, int fdindex);
-int			file_reader(int tmp, int mode, int fd);
+int			ft_piper(t_pip *pip, int fdindex, char **arg_list);
+int			file_reader(int fd, char **arg_list);
 void																					koi(char *str);
 #endif

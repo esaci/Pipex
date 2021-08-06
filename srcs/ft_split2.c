@@ -41,7 +41,7 @@ void	full_free(char **str)
 	free(str);
 }
 
-char	**ft_split2(char **s, t_pip *pip, char *ptr)
+char	**ft_split2(char **s, t_pip *pip, int index)
 {
 	int		count;
 	char	**d;
@@ -69,7 +69,8 @@ char	**ft_split2(char **s, t_pip *pip, char *ptr)
 		d[count2] = copieur(s[count2]);
 		count2++;
 	}
-	d[count2] = ptr;
+	index = (index == 1 ? 0 : 3);
+	d[count2] = pip->ptr[index];
 	count2++;
 	d[count2] = NULL;
 	s = d;
