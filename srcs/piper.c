@@ -30,7 +30,7 @@ int	file_reader(int fd, char **arg_list)
 	return (-1);
 }
 
-int		ft_piper(t_pip *pip, int fdindex, char **arg_list)
+int		ft_piper(t_pip *pip, int fdindex)
 {
 	int tmp;
 	int	tmp1;
@@ -44,8 +44,6 @@ int		ft_piper(t_pip *pip, int fdindex, char **arg_list)
 	if (fdindex == 3)
 		return(0);
 	lul = dup2(tmp1, tmp);
-	if (1 == 2)
-		arg_list = NULL;
 	if (pipe(fd) == -1)
 	{
 		printf("pipe a echoue \n");

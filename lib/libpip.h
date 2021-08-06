@@ -43,7 +43,7 @@ void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);
 void		full_free(char **str);
 pid_t		ft_executeur(t_pip *pip);
-int			ft_piper(t_pip *pip, int fdindex, char **arg_list);
+int			ft_piper(t_pip *pip, int fdindex);
 int			file_reader(int fd, char **arg_list);
 void																					koi(char *str);
 #endif
