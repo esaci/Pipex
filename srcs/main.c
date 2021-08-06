@@ -25,7 +25,7 @@ void	init_pip(t_pip *pip, char **argv)
 	count = 0;
 	while (count < 2)
 	{
-		pip->pid[count] = 'e';
+		pip->pid[count] = -2;
 		count++;
 	}
 	pip->tmp[0] = access(pip->ptr[0],R_OK);

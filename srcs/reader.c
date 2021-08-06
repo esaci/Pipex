@@ -67,24 +67,25 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	char	**arg_list;
 	int		tmp;
 
-
-	if (index == 1)
-		pip->pid[0] = ft_executeur(pip);//fork
-	else
-		pip->pid[1] = ft_executeur(pip);//fork
-	if (pip->pid[0] == 0 && pip->pid[1] == 'e')
-		koi("premier proco fonctionne");
-	if (pip->pid[0] == 'e' && pip->pid[1] == 0)
-		koi("deuxieme proco fonctionne")
-	if (index == 1 && pip->pid[1] && pip->pid[0])//si on est dans le parent, premiere iteration
+	if (pip->pid[1] < 0 && pip->pid[0] < 0)
+	{
+		ft_piper(pip, fdindex, arg_list);
+		pip->pid[0] = ft_executeur(pip);//pid[0] vaut mtn soit 0(fille) soit >0
+	}
+	if (pip->pid[1] < 0 && pip->pid[0])
+	{
+		ft_piper(pip, fdindex, arg_list);
+		pip->pid[1] = ft_executeur(pip);//pid[1] vaut mtn soit 0(fille) soit >0
+	}
+	if (pip->pid[1] < 0 && pip->pid[0] && index == 1)//si on est dans le premier parent, renvoie pour creer deuxiemme fille
 		return (ft_reader(pip, 2, 3, envp));
-	if ((!pip->pid[0] && !pip->pid[1]) || (pip->pid[0] != 0  && pip->pid[1] != 0))//fini le parent, la fille de la premiere fille
-		return (-1);
-	printf("Proc1:%d Proc2:%d\n", pip->pid[0], pip->pid[1]);
-	arg_list = arg_listeur(pip, index);//split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
-	/* if (pip->pid[0] != 0 || pip->pid[1] != 0) *///je vire le parent, mais de base il est vire....
-	arg_list[0] = parse_path(arg_list, pip);//jutilise le path qui correspond a la commande
-	ft_piper(pip, fdindex, arg_list);//JE PIPE :
+	if (pip->pid[0] && pip->pid[1])//Parent, ca degage !, Il ne reste plus que (0,-2) premier fils et (X,0) deuxiemme fils
+		return (0);
+
+
+
+	arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
+	arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
 	if (!pip->pid[0] && pip->pid[0])
 	{
 		printf("On applique :\n < %s ", pip->ptr[fdindex]);
