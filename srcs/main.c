@@ -53,7 +53,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!ft_memcmp(envp[count], "PATH", 4))
 			pip.pathptr = ft_split(envp[count] + 5, ':');
 		if (!ft_memcmp(envp[count], "PWD", 3))
-			pip.pwd = ft_split(envp[count] + 5, ':');
+			pip.pwd = ft_split(envp[count] + 3, 1);
 		count++;
 	}
 	init_pip(&pip, argv);
