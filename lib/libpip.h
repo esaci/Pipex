@@ -34,6 +34,7 @@ typedef struct s_pip
 	int		fd[2];
 	int		tmp[2];
 	char	**pathptr;
+	char	**pwd;
 }	t_pip;
 
 extern int errno ;

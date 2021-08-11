@@ -59,7 +59,11 @@ char	*parse_path(char **arg_list, t_pip *pip)
 	}
 	if (tmp == 0)
 		return (ptr);
-	return(arg_list[0]);
+	ptr = ft_strjoin(pip->pwd[0], arg_list[0]);
+	tmp = access(ptr, X_OK);
+	if (tmp == 0)
+		return (ptr);
+	return((arg_list[0] + 1));
 }
 
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
