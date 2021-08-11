@@ -51,10 +51,7 @@ int		ft_piper(int fd[2], t_pip *pip, int fdindex)
 	fd[1] = pip->fd[1]; */
 /* 	dup2(tmp1, tmp); */
 	if (fdindex == 3)
-	{
-
 		tmp = dup2(pip->fd[1], STDOUT_FILENO);
-	}
 /* 	dup2(pip->fd[1], 0); */
 	return (0);
 }

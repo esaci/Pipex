@@ -31,7 +31,9 @@ void	init_pip(t_pip *pip, char **argv)
 	pip->tmp[0] = access(pip->ptr[0],R_OK);
 	if (pip->tmp[0] == 0)
 		pip->fd[0] = open(pip->ptr[0], O_RDONLY);
-	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_APPEND, 0777);
+/* 	pip->tmp[1] = access(pip->ptr[3], ) */
+//	O_APPEND pour ajouter a la fin
+	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (pip->fd[1] == -1)
 		exit(1);
 }
@@ -53,7 +55,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!ft_memcmp(envp[count], "PATH", 4))
 			pip.pathptr = ft_split(envp[count] + 5, ':');
 		if (!ft_memcmp(envp[count], "PWD", 3))
-			pip.pwd = ft_split(envp[count] + 3, 1);
+			pip.pwd = ft_split(envp[count] + 4, 1);
 		count++;
 	}
 	init_pip(&pip, argv);
