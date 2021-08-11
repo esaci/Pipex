@@ -66,15 +66,17 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
+	int		fd[2];
 
 	if (pip->pid[1] < 0 && pip->pid[0] < 0)
 	{
-		ft_piper(pip, fdindex);
+		ft_piper(fd, pip, fdindex);
 		pip->pid[0] = ft_executeur(pip);//(0, -2)
 	}
 	else if (pip->pid[1] < 0 && pip->pid[0])
 	{
-		ft_piper(pip, fdindex);
+		waitpid(pip->pid[0], &tmp, 0);
+		ft_piper(fd, pip, fdindex);
 		pip->pid[1] = ft_executeur(pip);//(X, 0)
 	}
 	if (pip->pid[1] < 0 && pip->pid[0] && index == 1)//si on est dans le premier parent, renvoie pour creer deuxiemme fille
@@ -94,9 +96,6 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	} */
 	if (1==2)
 		fdindex = 0;
-/* 	int count = 0;
-		while(arg_list[count])
-			koi(arg_list[count++]); */
 	tmp = execve(arg_list[0], arg_list, envp);
 	if (tmp < 0)
 	{

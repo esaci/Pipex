@@ -1,0 +1,26 @@
+total 80
+-rw-r--r--@  1 esaci  2019_paris    892 Aug  4 15:52 Makefile
+drwxr-xr-x   6 esaci  2019_paris    204 Aug 11 13:08 bas
+-rw-r--r--   1 esaci  2019_paris    781 Aug  6 14:50 dpt.txt
+-rw-r--r--@  1 esaci  2019_paris      5 Aug  6 14:32 infile
+drwxr-xr-x   6 esaci  2019_paris    204 Aug 11 14:40 lib
+-rw-r--r--   1 esaci  2019_paris   1562 Aug  7 14:05 log
+-rwxr-xr-x   1 esaci  2019_paris      0 Aug 11 14:41 outfile
+-rwxr-xr-x   1 esaci  2019_paris  18796 Aug 11 14:40 pipex
+drwxr-xr-x  13 esaci  2019_paris    442 Aug  6 17:25 pipex-tester
+-rw-r--r--   1 esaci  2019_paris      0 Aug  6 14:00 rien
+drwxr-xr-x  15 esaci  2019_paris    510 Aug 11 14:40 srcs
+-rw-r--r--   1 esaci  2019_paris      4 Aug  6 15:41 test
+total 88
+-rw-r--r--@  1 esaci  2019_paris    892 Aug  4 15:52 Makefile
+drwxr-xr-x   6 esaci  2019_paris    204 Aug 11 13:08 bas
+-rw-r--r--   1 esaci  2019_paris    781 Aug  6 14:50 dpt.txt
+-rw-r--r--@  1 esaci  2019_paris      5 Aug  6 14:32 infile
+drwxr-xr-x   6 esaci  2019_paris    204 Aug 11 14:47 lib
+-rw-r--r--   1 esaci  2019_paris   1562 Aug  7 14:05 log
+-rwxr-xr-x   1 esaci  2019_paris    723 Aug 11 14:41 outfile
+-rwxr-xr-x   1 esaci  2019_paris  18796 Aug 11 14:47 pipex
+drwxr-xr-x  13 esaci  2019_paris    442 Aug  6 17:25 pipex-tester
+-rw-r--r--   1 esaci  2019_paris      0 Aug  6 14:00 rien
+drwxr-xr-x  15 esaci  2019_paris    510 Aug 11 14:40 srcs
+-rw-r--r--   1 esaci  2019_paris      4 Aug  6 15:41 test

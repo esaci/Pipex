@@ -30,23 +30,31 @@ int	file_reader(int fd, char **arg_list)
 	return (-1);
 }
 
-int		ft_piper(t_pip *pip, int fdindex)
+int		ft_piper(int fd[2], t_pip *pip, int fdindex)
 {
 	int tmp;
 	int	tmp1;
-	int	fd[2];
 
-	if (fdindex == 3)
-		return(0);
-	tmp = (fdindex == 0 ? pip->fd[0] : 0);
-	tmp1 = (fdindex == 0 ? 0 : pip->fd[1]);
-	fd[2] = pip->fd[1]
-/* 	dup2(tmp1, tmp); */
 	if (pipe(fd) == -1)
 	{
 		printf("pipe a echoue \n");
 		ft_stop(pip, "fork");
 	}
-	/* koi("pipe reussi !"); */
+	if (fdindex == 0)
+	{
+		tmp = dup2(pip->fd[0], STDIN_FILENO);
+		tmp1 = dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+	}
+/* 	tmp = (fdindex == 0 ? pip->fd[0] : 0);
+	tmp1 = (fdindex == 0 ? 0 : pip->fd[1]);
+	fd[1] = pip->fd[1]; */
+/* 	dup2(tmp1, tmp); */
+	if (fdindex == 3)
+	{
+
+		tmp = dup2(pip->fd[1], STDOUT_FILENO);
+	}
+/* 	dup2(pip->fd[1], 0); */
 	return (0);
 }

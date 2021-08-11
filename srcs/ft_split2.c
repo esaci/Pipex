@@ -69,6 +69,9 @@ char	**ft_split2(char **s, t_pip *pip, int index)
 		d[count2] = copieur(s[count2]);
 		count2++;
 	}
+	d[count2] = NULL;
+	s = d;
+	return (s);
 	index = (index == 1 ? 0 : 3);
 	d[count2] = pip->ptr[index];
 	count2++;
