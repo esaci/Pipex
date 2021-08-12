@@ -90,16 +90,27 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	/* printf("On a Index: %d Pour  (%d,%d)\n", index, pip->pid[0], pip->pid[1]); */
 	arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
 	arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
-/* 	if (!pip->pid[0] && pip->pid[1])
+	int	tmpfd;
+	int esc;
+	esc = open("main.c",O_RDONLY, 0777);
+	tmpfd = open("esc", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (!pip->pid[1] && pip->pid[0])
 	{
-		printf("On applique :\n < %s ", pip->ptr[fdindex]);
+		write(tmpfd, "On applique :\n", 14);
 		int count = 0;
-		while(arg_list[count + 1])
-			printf("%s ", arg_list[count++]);
-		printf("\n");
-	} */
-	if (1==2)
-		fdindex = 0;
+		char	*ptr;
+		ptr = NULL;
+/* 		while(arg_list[count])
+		{
+			write(tmpfd, arg_list[count], ft_strlen(arg_list[count]));
+			write(tmpfd, "\n", 1);
+			count++;
+		} */
+		while((count = get_next_line(0, &ptr)) > 0)
+		{
+			write(tmpfd, ptr, ft_strlen(ptr));
+		}
+	}
 	tmp = execve(arg_list[0], arg_list, envp);
 	if (tmp < 0)
 	{
