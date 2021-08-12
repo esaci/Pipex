@@ -71,6 +71,7 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	char	**arg_list;
 	int		tmp;
 	int		fd[2];
+	int		fd2[2];
 
 	if (pip->pid[1] < 0 && pip->pid[0] < 0)
 	{

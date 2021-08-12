@@ -35,14 +35,10 @@ int		ft_piper(int fd[2], t_pip *pip, int fdindex)
 	int tmp;
 	int	tmp1;
 
-	koi("test\n");
-	if (fdindex == 0)
+	if (pipe(fd) == -1)
 	{
-		if (pipe(fd) == -1)
-		{
-			printf("pipe a echoue \n");
-			ft_stop(pip, "fork");
-		}
+		printf("pipe a echoue \n");
+		ft_stop(pip, "fork");
 	}
 	if (fdindex == 0)
 	{
@@ -58,7 +54,7 @@ int		ft_piper(int fd[2], t_pip *pip, int fdindex)
 	{
 		close(fd[1]);
 		tmp = dup2(pip->fd[1], STDOUT_FILENO);
-		tmp1 = dup2(fd[0], STDIN_FILENO);
+/* 		tmp1 = dup2(fd[0], STDIN_FILENO); */
 	}
 /* 	dup2(pip->fd[1], 0); */
 	return (0);
