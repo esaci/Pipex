@@ -35,6 +35,8 @@ typedef struct s_pip
 	int		tmp[2];
 	char	**pathptr;
 	char	**pwd;
+	int		pfd1[2];
+	int		pfd2[2];
 }	t_pip;
 
 extern int errno ;
@@ -44,7 +46,7 @@ void		ft_stop(t_pip *pip, char *str);
 pid_t		forker(t_pip *pip);
 void		full_free(char **str);
 pid_t		ft_executeur(t_pip *pip);
-int			ft_piper(int fd[2], t_pip *pip, int fdindex);
+int			ft_piper(t_pip *pip, int fdindex);
 int			file_reader(int fd, char **arg_list);
 void																					koi(char *str);
 #endif

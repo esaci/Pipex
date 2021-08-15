@@ -36,6 +36,16 @@ void	init_pip(t_pip *pip, char **argv)
 	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (pip->fd[1] == -1)
 		exit(1);
+	if (pipe(pip->pfd1) == -1)
+	{
+		printf("pipe a echoue \n");
+		ft_stop(pip, "fork");
+	}
+	if (pipe(pip->pfd2) == -1)
+	{
+		printf("pipe a echoue \n");
+		ft_stop(pip, "fork");
+	}
 }
 
 int	main(int argc, char *argv[], char *envp[])

@@ -70,19 +70,17 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
-	int		fd[2];
-	int		fd2[2];
 
 	if (pip->pid[1] < 0 && pip->pid[0] < 0)
 	{
-		ft_piper(fd, pip, fdindex);
 		pip->pid[0] = ft_executeur(pip);//(0, -2)
+		ft_piper(pip, fdindex);
 	}
 	else if (pip->pid[1] < 0 && pip->pid[0])
 	{
 		waitpid(pip->pid[0], &tmp, 0);
-		ft_piper(fd, pip, fdindex);
 		pip->pid[1] = ft_executeur(pip);//(X, 0)
+		ft_piper(pip, fdindex);
 	}
 	if (pip->pid[1] < 0 && pip->pid[0] && index == 1)//si on est dans le premier parent, renvoie pour creer deuxiemme fille
 		return (ft_reader(pip, 2, 3, envp));
