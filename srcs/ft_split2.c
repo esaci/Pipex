@@ -41,6 +41,32 @@ void	full_free(char **str)
 	free(str);
 }
 
+char	*merge_twoarray(char *s, char *d)
+{
+	int count;
+	int count2;
+	char *ptr;
+
+	if (!s && !d)
+		return (NULL);
+	count = ft_strlen(s) + ft_strlen(d);
+	ptr = malloc(sizeof(char) * count);
+	count = 0;
+	count2 = 0;
+	while (s[count])
+	{
+		ptr[count] = s[count];
+		count++;
+	}
+	while (d[count2])
+	{
+		ptr[count + count2] = d[count2];
+		count2++;
+	}
+	ptr[count + count2] = 0;
+	return (ptr);
+}
+
 char	**ft_split2(char **s, t_pip *pip, int index)
 {
 	int		count;

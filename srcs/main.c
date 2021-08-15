@@ -57,6 +57,7 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_pip	pip;
 	int		count;
+	int		count2;
 	int		status;
 
 
@@ -75,13 +76,13 @@ int	main(int argc, char *argv[], char *envp[])
 		count++;
 	}
 	init_pip(&pip, argv);
-	count = ft_reader(&pip, 1, 0, envp);
+	count2 = ft_reader(&pip, 1, 0, envp);
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
 	/* waitpid(pip.pid[1], &count, 0); */
 	for (count = 0; count < 2; count++)
     	wait(&status);
-	return (0);
+	return (count2);
 }
 

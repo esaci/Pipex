@@ -47,5 +47,6 @@ void		full_free(char **str);
 pid_t		ft_executeur(t_pip *pip);
 int			ft_piper(t_pip *pip, int fdindex);
 int			file_reader(int fd, char **arg_list);
+char		*merge_twoarray(char *s, char *d);
 void																					koi(char *str);
 #endif
