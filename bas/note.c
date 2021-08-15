@@ -5,58 +5,111 @@
 #include <sys/stat.h>
 
 /**
- * Executes the command "cat scores | grep Villanova".  In this quick-and-dirty
- * implementation the parent doesn't wait for the child to finish and
- * so the command prompt may reappear before the child terminates.
+ * Executes the command "cat scores | grep Villanova | cut -b 1-10".
+ * This quick-and-dirty version does no error checking.
  *
  * @author Jim Glenn
- * @version 0.1 9/23/2004
+ * @version 0.1 10/4/2004
  */
 
 int main(int argc, char **argv)
 {
-  int pipefd[2];
-  int pid;
+  int status;
+  int i;
+
+  // arguments for commands; your parser would be responsible for
+  // setting up arrays like these
 
   char *cat_args[] = {"cat", "scores", NULL};
   char *grep_args[] = {"grep", "Villanova", NULL};
+  char *cut_args[] = {"cut", "-b", "1-10", NULL};
 
-  // make a pipe (fds go in pipefd[0] and pipefd[1])
+  // make 2 pipes (cat to grep and grep to cut); each has 2 fds
 
-  pipe(pipefd);
+  int pipes[4];
+  pipe(pipes); // sets up 1st pipe
+  pipe(pipes + 2); // sets up 2nd pipe
 
-  pid = fork();
+  // we now have 4 fds:
+  // pipes[0] = read end of cat->grep pipe (read by grep)
+  // pipes[1] = write end of cat->grep pipe (written by cat)
+  // pipes[2] = read end of grep->cut pipe (read by cut)
+  // pipes[3] = write end of grep->cut pipe (written by grep)
 
-  if (pid == 0)
+  // Note that the code in each if is basically identical, so you
+  // could set up a loop to handle it.  The differences are in the
+  // indicies into pipes used for the dup2 system call
+  // and that the 1st and last only deal with the end of one pipe.
+
+  // fork the first child (to execute cat)
+
+  if (fork() == 0)
     {
-      // child gets here and handles "grep Villanova"
+      // replace cat's stdout with write part of 1st pipe
 
-      // replace standard input with input part of pipe
+      dup2(pipes[1], 1);
 
-      dup2(pipefd[0], 0);
+      // close all pipes (very important!); end we're using was safely copied
 
-      // close unused hald of pipe
+      close(pipes[0]);
+      close(pipes[1]);
+      close(pipes[2]);
+      close(pipes[3]);
 
-      close(pipefd[1]);
-
-      // execute grep
-
-      execvp("grep", grep_args);
+      execvp(*cat_args, cat_args);
     }
   else
     {
-      // parent gets here and handles "cat scores"
+      // fork second child (to execute grep)
 
-      // replace standard output with output part of pipe
+      if (fork() == 0)
+	{
+	  // replace grep's stdin with read end of 1st pipe
 
-      dup2(pipefd[1], 1);
+	  dup2(pipes[0], 0);
 
-      // close unused unput half of pipe
+	  // replace grep's stdout with write end of 2nd pipe
 
-      close(pipefd[0]);
+	  dup2(pipes[3], 1);
 
-      // execute cat
+	  // close all ends of pipes
 
-      execvp("cat", cat_args);
+	  close(pipes[0]);
+	  close(pipes[1]);
+	  close(pipes[2]);
+	  close(pipes[3]);
+
+	  execvp(*grep_args, grep_args);
+	}
+      else
+	{
+	  // fork third child (to execute cut)
+
+	  if (fork() == 0)
+	    {
+	      // replace cut's stdin with input read of 2nd pipe
+
+	      dup2(pipes[2], 0);
+
+	      // close all ends of pipes
+
+	      close(pipes[0]);
+	      close(pipes[1]);
+	      close(pipes[2]);
+	      close(pipes[3]);
+
+	      execvp(*cut_args, cut_args);
+	    }
+	}
     }
+
+  // only the parent gets here and waits for 3 children to finish
+
+  close(pipes[0]);
+  close(pipes[1]);
+  close(pipes[2]);
+  close(pipes[3]);
+
+  for (i = 0; i < 3; i++)
+    wait(&status);
 }

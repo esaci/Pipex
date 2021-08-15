@@ -34,22 +34,24 @@ int		ft_piper(t_pip *pip, int fdindex)
 {
 	int tmp;
 	int	tmp1;
+	int count;
 
-	if (fdindex == 0)
+	if (fdindex == 0 && !pip->pid[0] && pip->pid[1] < 0)
 	{
-		close(pip->pfd1[0]);
 		tmp = dup2(pip->fd[0], STDIN_FILENO);
-		tmp1= dup2(pip->pfd1[1], STDOUT_FILENO);
+		tmp1= dup2(pip->pfd1[3], STDOUT_FILENO);
+		count = 0;
+		while (count < 4)
+			close(pip->pfd1[count++]);
+		close(pip->fd[0]);
 	}
-/* 	tmp = (fdindex == 0 ? pip->fd[0] : 0);
-	tmp1 = (fdindex == 0 ? 0 : pip->fd[1]);
-	fd[1] = pip->fd[1]; */
-/* 	dup2(tmp1, tmp); */
-	if (fdindex == 3)
+	if (fdindex == 3 && !pip->pid[1] && pip->pid[0] > 0)
 	{
-		tmp = dup2(pip->fd[1], STDOUT_FILENO);
-		tmp1 = dup2(pip->pfd2[0], STDIN_FILENO);
+		tmp = dup2(pip->pfd1[2], STDIN_FILENO);
+		tmp1 = dup2(pip->fd[1], STDOUT_FILENO);
+		count = 0;
+		while (count < 4)
+			close(pip->pfd1[count++]);
 	}
-/* 	dup2(pip->fd[1], 0); */
 	return (0);
 }

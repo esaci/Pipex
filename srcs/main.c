@@ -41,17 +41,23 @@ void	init_pip(t_pip *pip, char **argv)
 		printf("pipe a echoue \n");
 		ft_stop(pip, "fork");
 	}
-	if (pipe(pip->pfd2) == -1)
+	if (pipe(pip->pfd1 + 2) == -1)
 	{
 		printf("pipe a echoue \n");
 		ft_stop(pip, "fork");
 	}
+  // cmd1 scores | cmd2 Villanova | cmd3 1-10
+  // pip->pfd1[0] = read end of cmd1 pipe (read by cmd2)
+  // pip->pfd1[1] = write end of cmd2 pipe (written by cmd1)
+  // pip->pfd1[2] = read end of cmd2 pipe (read by cmd3)
+  // pip->pfd1[3] = write end of cmd3 pipe (written by cmd2)
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pip	pip;
 	int		count;
+	int		status;
 
 
 	if (argc < 5)
@@ -70,9 +76,12 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	init_pip(&pip, argv);
 	count = ft_reader(&pip, 1, 0, envp);
-	if (count == -1)
-		return (0);
-	waitpid(pip.pid[1], &count, 0);
+	count = 0;
+	while (count < 4)
+		close(pip.pfd1[count++]);
+	/* waitpid(pip.pid[1], &count, 0); */
+	for (count = 0; count < 2; count++)
+    	wait(&status);
 	return (0);
 }
 

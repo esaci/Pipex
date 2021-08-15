@@ -35,8 +35,7 @@ typedef struct s_pip
 	int		tmp[2];
 	char	**pathptr;
 	char	**pwd;
-	int		pfd1[2];
-	int		pfd2[2];
+	int		pfd1[4];
 }	t_pip;
 
 extern int errno ;
