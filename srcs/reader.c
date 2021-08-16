@@ -88,12 +88,6 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
 		arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
 		tmp = execve(arg_list[0], arg_list, envp);
-/* 		if (tmp < 0)
-		{
-			arg_list[0] = strerror(errno);
-			perror(arg_list[0]);
-			exit (1);
-		} */
 	}
 	else
 	{
@@ -105,12 +99,6 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 			arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
 			arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
 			tmp = execve(arg_list[0], arg_list, envp);
-/* 			if (tmp < 0)
-			{
-				arg_list[0] = strerror(errno);
-				perror(arg_list[0]);
-				exit(1);
-			} */
 		}
 	}
 	return (tmp);
