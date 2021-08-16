@@ -80,11 +80,14 @@ int	main(int argc, char *argv[], char *envp[])
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
-	if (!WIFEXITED(status))
-		return (status);
-	waitpid(pip.pid[1], &status, 0);
 /* 	if (!WIFEXITED(status))
 		return (status); */
-	return (status);
+/* 	if (!WIFEXITED(status))
+		return (WEXITSTATUS(status)); */
+	waitpid(pip.pid[1], &status, 0);
+	/* if (!WIFEXITED(status))
+		return (WEXITSTATUS(status)); */
+	waitpid(pip.pid[1], &status, 0);
+	return (count2);
 }
 

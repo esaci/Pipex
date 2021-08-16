@@ -73,13 +73,14 @@ char	*parse_path(char **arg_list, t_pip *pip)
 	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
 	perror(ptr);
 	free(ptr);
-	return (NULL);
+	return (arg_list[0] + 1);
 }
 
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
+	int waitstatus;
 
 	tmp = 0;
 	if (!(pip->pid[0] = fork()))
@@ -87,10 +88,13 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		ft_piper(pip, fdindex);
 		arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
 		arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
+		if (!arg_list[0])
+			return (127);
 		tmp = execve(arg_list[0], arg_list, envp);
 	}
 	else
 	{
+        tmp = WEXITSTATUS(waitstatus);
 		if (!(pip->pid[1] = fork()))
 		{
 			index = 2;
@@ -98,8 +102,12 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 			ft_piper(pip, fdindex);
 			arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
 			arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
+			if (!arg_list[0])
+				return (127);
 			tmp = execve(arg_list[0], arg_list, envp);
 		}
+		else
+			return (tmp);
 	}
 	return (tmp);
 }
