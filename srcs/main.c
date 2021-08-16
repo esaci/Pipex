@@ -63,8 +63,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc < 5)
 	{
-		printf("\nIl manque des arguments (%d/5)\n", argc);
-		return (0);
+		return (1);
 	}
 	count = 0;
 	while (envp[count])
@@ -80,9 +79,7 @@ int	main(int argc, char *argv[], char *envp[])
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
-	/* waitpid(pip.pid[1], &count, 0); */
-	for (count = 0; count < 2; count++)
-    	wait(&status);
+/* 	waitpid(pip.pid[1], &status, 0); */
 	return (count2);
 }
 

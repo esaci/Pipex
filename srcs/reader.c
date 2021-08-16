@@ -92,7 +92,7 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		{
 			arg_list[0] = strerror(errno);
 			perror(arg_list[0]);
-			return (tmp);
+			exit (tmp);
 		}
 	}
 	else
