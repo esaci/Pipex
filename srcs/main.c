@@ -31,6 +31,7 @@ void	init_pip(t_pip *pip, char **argv)
 	pip->tmp[0] = access(pip->ptr[0],R_OK);
 	if (pip->tmp[0] == 0)
 		pip->fd[0] = open(pip->ptr[0], O_RDONLY);
+
 /* 	pip->tmp[1] = access(pip->ptr[3], ) */
 //	O_APPEND pour ajouter a la fin
 	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
@@ -79,7 +80,7 @@ int	main(int argc, char *argv[], char *envp[])
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
-/* 	waitpid(pip.pid[1], &status, 0); */
-	return (count2);
+	waitpid(pip.pid[1], &status, 0);
+	return (status);
 }
 
