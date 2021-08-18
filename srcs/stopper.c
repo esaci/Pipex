@@ -34,8 +34,11 @@ void	double_free(char **str)
 {
 	int	count;
 
-	return;
 	count = 0;
-	while (str[count] && count < 2)
-		free(str[count++]);
+	while (str[count])
+	{
+		free(str[count]);
+		count++;
+	}
+	free(str);
 }

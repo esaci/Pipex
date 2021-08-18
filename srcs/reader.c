@@ -44,12 +44,17 @@ char	*parse_path2(char **arg_list, t_pip *pip)
 	ptr = ft_strjoin(pip->pwd[0], arg_list[0]);
 	tmp = access(ptr, X_OK);
 	if (tmp == 0)
+	{
+		free(arg_list[0]);
 		return (ptr);
+	}
 	free(ptr);
 	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
 	perror(ptr);
 	free(ptr);
-	return (arg_list[0] + 1);
+	ptr = copieur(arg_list[0] + 1);
+	free(arg_list[0]);
+	return (ptr);
 }
 
 char	*parse_path(char **arg_list, t_pip *pip)
@@ -72,7 +77,10 @@ char	*parse_path(char **arg_list, t_pip *pip)
 		count++;
 	}
 	if (tmp == 0)
+	{
+		free(arg_list[0]);
 		return (ptr);
+	}
 	return (parse_path2(arg_list, pip));
 }
 

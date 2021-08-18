@@ -81,6 +81,8 @@ int	main(int argc, char *argv[], char *envp[])
 		close(pip.pfd1[count++]);
 	waitpid(pip.pid[0], &status, 0);
 	waitpid(pip.pid[1], &status, 0);
+	double_free(pip.pathptr);
+	double_free(pip.pwd);
 	if (WIFEXITED(status))
 	{
 		count = WEXITSTATUS(status);

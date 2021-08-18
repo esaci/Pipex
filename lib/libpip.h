@@ -50,4 +50,5 @@ char		*merge_twoarray(char *s, char *d);
 void		koi(char *str);
 void		double_free(char **str);
 char		*copieur(char *s);
+int			len_double(char **str);
 #endif

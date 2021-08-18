@@ -80,7 +80,7 @@ char	**ft_split3(char **d, char **s, int index, t_pip *pip)
 	free(s);
 	if (index == 1 && pip->fd[0] == -1)
 	{
-		d[count2] = pip->ptr[0];
+		d[count2] = copieur(pip->ptr[0]);
 		d[++count2] = NULL;
 	}
 	else
