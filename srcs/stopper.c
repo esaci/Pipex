@@ -30,7 +30,11 @@ void	ft_stop(t_pip *pip, char *str)
 	exit(1);
 }
 
-void	elias(char **str)
+void	double_free(char **str)
 {
-	str = 0;
+	int	count;
+
+	count = 0;
+	while (str[count] && count < 2)
+		free(str[count++]);
 }

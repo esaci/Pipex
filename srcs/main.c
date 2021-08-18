@@ -72,9 +72,7 @@ int	main(int argc, char *argv[], char *envp[])
 	int		status;
 
 	if (argc < 5)
-	{
 		return (1);
-	}
 	envp_init(envp, &pip);
 	init_pip(&pip, argv);
 	count2 = ft_reader(&pip, 1, 0, envp);

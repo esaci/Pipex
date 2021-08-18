@@ -48,5 +48,6 @@ int			ft_piper(t_pip *pip, int fdindex);
 int			file_reader(int fd, char **arg_list);
 char		*merge_twoarray(char *s, char *d);
 void		koi(char *str);
-void		elias(char **str)
+void		double_free(char **str);
+char		*copieur(char *s);
 #endif

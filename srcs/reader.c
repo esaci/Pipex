@@ -29,7 +29,7 @@ char	**arg_listeur(t_pip *pip, int index)
 	else
 	{
 		ptr = malloc(sizeof(char *) * 2);
-		ptr[0] = pip->ptr[index];
+		ptr[0] = copieur(pip->ptr[index]);
 		ptr[1] = NULL;
 	}
 	ptr = ft_split2(ptr, pip, index);
@@ -92,6 +92,7 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 		ft_piper(pip, fdindex);
 		tmp = execve(arg_list[0], arg_list, envp);
 	}
+	double_free(arg_list);
 	return (tmp);
 }
 
@@ -109,10 +110,11 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		if (arg_list[0][0] != '/')
 			exit(127);
 		ft_piper(pip, fdindex);
-		tmp = execve(arg_list[0], arg_list, envp);
+		execve(arg_list[0], arg_list, envp);
 	}
 	else
 	{
+		double_free(arg_list);
 		tmp = ft_reader2(pip, envp, 2, 3);
 	}
 	return (tmp);
