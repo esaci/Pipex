@@ -14,7 +14,6 @@
 
 int	file_reader(int fd, char **arg_list)
 {
-	int		res;
 	char	*ptr;
 	int		count;
 
@@ -22,7 +21,7 @@ int	file_reader(int fd, char **arg_list)
 	while (arg_list[count])
 		count++;
 	ptr = NULL;
-	while((res = get_next_line(fd, &ptr)) > 0)
+	while (get_next_line(fd, &ptr) > 0)
 	{
 		arg_list[count - 1] = ptr;
 		return (0);
@@ -30,16 +29,16 @@ int	file_reader(int fd, char **arg_list)
 	return (-1);
 }
 
-int		ft_piper(t_pip *pip, int fdindex)
+int	ft_piper(t_pip *pip, int fdindex)
 {
-	int tmp;
-	int	tmp1;
-	int count;
+	int		tmp;
+	int		tmp1;
+	int		count;
 
 	if (fdindex == 0)
 	{
 		tmp = dup2(pip->fd[0], STDIN_FILENO);
-		tmp1= dup2(pip->pfd1[1], STDOUT_FILENO);
+		tmp1 = dup2(pip->pfd1[1], STDOUT_FILENO);
 		count = 0;
 		while (count < 4)
 			close(pip->pfd1[count++]);
