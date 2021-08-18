@@ -88,7 +88,7 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 {
 	char	**arg_list;
 	int		tmp;
-/* 	char	*ptr; */
+	char	*ptr;
 
 	tmp = 0;
 	arg_list = arg_listeur(pip, index);
@@ -104,13 +104,18 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 			exit(127);
 		}
 		ft_piper(pip, fdindex);
-		if (execve(arg_list[0], arg_list, envp) == -1)
+		if (access(arg_list[0], X_OK) == -1)
 		{
+			ptr = merge_twoarray("command not found: ", pip->ptr[2]);
 			double_free(pip->pathptr);
 			double_free(pip->pwd);
 			double_free(arg_list);
-			exit(126);
+			perror(ptr);
+			free(ptr);
+			exit(0);
 		}
+		tmp = execve(arg_list[0], arg_list, envp);
+		koi(ft_itoa(tmp));
 	}
 	double_free(arg_list);
 	return (tmp);
@@ -120,7 +125,7 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
-/* 	char	*ptr; */
+	char	*ptr;
 
 	tmp = 0;
 	arg_list = arg_listeur(pip, index);
@@ -135,14 +140,19 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 			double_free(arg_list);
 			exit(127);
 		}
-		ft_piper(pip, fdindex);
-		if (execve(arg_list[0], arg_list, envp) == -1)
+		if (access(arg_list[0], X_OK) == -1)
 		{
+			ptr = merge_twoarray("Permission denied: ", arg_list[0]);
 			double_free(pip->pathptr);
 			double_free(pip->pwd);
 			double_free(arg_list);
+			perror(ptr);
+			free(ptr);
 			exit(126);
 		}
+		ft_piper(pip, fdindex);
+		tmp = execve(arg_list[0], arg_list, envp);
+		koi(ft_itoa(tmp));
 	}
 	else
 	{
