@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef LIBPIP_H
 # define LIBPIP_H
 
@@ -24,8 +23,10 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <errno.h>
+# include <sys/errno.h>
 # include "./libft/libft.h"
 # include "./GNL/get_next_line.h"
+
 typedef struct s_pip
 {
 	char	*ptr[4];
@@ -38,7 +39,6 @@ typedef struct s_pip
 	int		pfd1[4];
 }	t_pip;
 
-extern int errno ;
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
 char		**ft_split2(char **s, t_pip *pip, int index);
 void		ft_stop(t_pip *pip, char *str);
@@ -48,5 +48,5 @@ pid_t		ft_executeur(t_pip *pip);
 int			ft_piper(t_pip *pip, int fdindex);
 int			file_reader(int fd, char **arg_list);
 char		*merge_twoarray(char *s, char *d);
-void																					koi(char *str);
+void		koi(char *str);
 #endif
