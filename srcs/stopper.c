@@ -12,6 +12,11 @@
 
 #include "../lib/libpip.h"
 
+void	koi(char *str)
+{
+	printf("|%s|\n", str);
+}
+
 void	ft_stop(t_pip *pip, char *str)
 {
 	int	count;

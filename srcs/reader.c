@@ -12,11 +12,6 @@
 
 #include "../lib/libpip.h"
 
-void	koi(char *str)
-{
-	printf("|%s|\n", str);
-}
-
 char	**arg_listeur(t_pip *pip, int index)
 {
 	char	**ptr;
@@ -30,7 +25,7 @@ char	**arg_listeur(t_pip *pip, int index)
 		count++;
 	}
 	if (pip->ptr[index][count])
-		ptr = ft_split(pip->ptr[index] , ' ');
+		ptr = ft_split(pip->ptr[index], ' ');
 	else
 	{
 		ptr = malloc(sizeof(char *) * 2);
@@ -39,6 +34,22 @@ char	**arg_listeur(t_pip *pip, int index)
 	}
 	ptr = ft_split2(ptr, pip, index);
 	return (ptr);
+}
+
+char	*parse_path2(char **arg_list, t_pip *pip)
+{
+	char	*ptr;
+	int		tmp;
+
+	ptr = ft_strjoin(pip->pwd[0], arg_list[0]);
+	tmp = access(ptr, X_OK);
+	if (tmp == 0)
+		return (ptr);
+	free(ptr);
+	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
+	perror(ptr);
+	free(ptr);
+	return (arg_list[0] + 1);
 }
 
 char	*parse_path(char **arg_list, t_pip *pip)
@@ -55,22 +66,33 @@ char	*parse_path(char **arg_list, t_pip *pip)
 	while (pip->pathptr[count] && tmp != 0)
 	{
 		ptr = ft_strjoin(pip->pathptr[count], arg_list[0]);
-		tmp = access(ptr ,X_OK);
+		tmp = access(ptr, X_OK);
 		if (tmp != 0)
 			free(ptr);
 		count++;
 	}
 	if (tmp == 0)
 		return (ptr);
-	ptr = ft_strjoin(pip->pwd[0], arg_list[0]);
-	tmp = access(ptr, X_OK);
-	if (tmp == 0)
-		return (ptr);
-	free(ptr);
-	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
-	perror(ptr);
-	free(ptr);
-	return (arg_list[0] + 1);
+	return (parse_path2(arg_list, pip));
+}
+
+int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
+{
+	char	**arg_list;
+	int		tmp;
+
+	tmp = 0;
+	arg_list = arg_listeur(pip, index);
+	arg_list[0] = parse_path(arg_list, pip);
+	pip->pid[1] = fork();
+	if (!(pip->pid[1]))
+	{
+		if (arg_list[0][0] != '/')
+			exit(127);
+		ft_piper(pip, fdindex);
+		tmp = execve(arg_list[0], arg_list, envp);
+	}
+	return (tmp);
 }
 
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
@@ -81,26 +103,17 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	tmp = 0;
 	arg_list = arg_listeur(pip, index);
 	arg_list[0] = parse_path(arg_list, pip);
-	if (!(pip->pid[0] = fork()))
+	pip->pid[0] = fork();
+	if (!(pip->pid[0]))
 	{
 		if (arg_list[0][0] != '/')
-				exit(127);
+			exit(127);
 		ft_piper(pip, fdindex);
 		tmp = execve(arg_list[0], arg_list, envp);
 	}
 	else
 	{
-		index = 2;
-		fdindex = 3;
-		arg_list = arg_listeur(pip, index);
-		arg_list[0] = parse_path(arg_list, pip);
-		if (!(pip->pid[1] = fork()))
-		{
-			if (arg_list[0][0] != '/')
-				exit(127);
-			ft_piper(pip, fdindex);
-			tmp = execve(arg_list[0], arg_list, envp);
-		}
+		tmp = ft_reader2(pip, envp, 2, 3);
 	}
 	return (tmp);
 }
