@@ -12,30 +12,6 @@
 
 #include "../lib/libpip.h"
 
-char	**arg_listeur(t_pip *pip, int index)
-{
-	char	**ptr;
-	int		count;
-
-	count = 0;
-	while (pip->ptr[index][count])
-	{
-		if (pip->ptr[index][count] == ' ')
-			break ;
-		count++;
-	}
-	if (pip->ptr[index][count])
-		ptr = ft_split(pip->ptr[index], ' ');
-	else
-	{
-		ptr = malloc(sizeof(char *) * 2);
-		ptr[0] = copieur(pip->ptr[index]);
-		ptr[1] = NULL;
-	}
-	ptr = ft_split2(ptr, pip, index);
-	return (ptr);
-}
-
 char	*parse_path2(char **arg_list, t_pip *pip)
 {
 	char	*ptr;
@@ -84,80 +60,86 @@ char	*parse_path(char **arg_list, t_pip *pip)
 	return (parse_path2(arg_list, pip));
 }
 
+char	**arg_listeur(t_pip *pip, int index)
+{
+	char	**ptr;
+	int		count;
+
+	count = 0;
+	while (pip->ptr[index][count])
+	{
+		if (pip->ptr[index][count] == ' ')
+			break ;
+		count++;
+	}
+	if (pip->ptr[index][count])
+		ptr = ft_split(pip->ptr[index], ' ');
+	else
+	{
+		ptr = malloc(sizeof(char *) * 2);
+		ptr[0] = copieur(pip->ptr[index]);
+		ptr[1] = NULL;
+	}
+	ptr = ft_split2(ptr, pip, index);
+	ptr[0] = parse_path(ptr, pip);
+	return (ptr);
+}
+
 int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 {
 	char	**arg_list;
-	int		tmp;
 	char	*ptr;
 
-	tmp = 0;
 	arg_list = arg_listeur(pip, index);
-	arg_list[0] = parse_path(arg_list, pip);
 	pip->pid[1] = fork();
 	if (!(pip->pid[1]))
 	{
 		if (arg_list[0][0] != '/')
 		{
-			double_free(pip->pathptr);
-			double_free(pip->pwd);
-			double_free(arg_list);
+			ult_free(pip, arg_list);
 			exit(127);
 		}
-		ft_piper(pip, fdindex);
 		if (access(arg_list[0], X_OK) == -1)
 		{
 			ptr = merge_twoarray("command not found: ", pip->ptr[2]);
-			double_free(pip->pathptr);
-			double_free(pip->pwd);
-			double_free(arg_list);
+			ult_free(pip, arg_list);
 			perror(ptr);
 			free(ptr);
 			exit(0);
 		}
-		tmp = execve(arg_list[0], arg_list, envp);
-		koi(ft_itoa(tmp));
+		ft_piper(pip, fdindex);
+		execve(arg_list[0], arg_list, envp);
 	}
 	double_free(arg_list);
-	return (tmp);
+	return (0);
 }
 
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
-	int		tmp;
 	char	*ptr;
 
-	tmp = 0;
 	arg_list = arg_listeur(pip, index);
-	arg_list[0] = parse_path(arg_list, pip);
 	pip->pid[0] = fork();
 	if (!(pip->pid[0]))
 	{
 		if (arg_list[0][0] != '/')
 		{
-			double_free(pip->pathptr);
-			double_free(pip->pwd);
-			double_free(arg_list);
+			ult_free(pip, arg_list);
 			exit(127);
 		}
 		if (access(arg_list[0], X_OK) == -1)
 		{
 			ptr = merge_twoarray("Permission denied: ", arg_list[0]);
-			double_free(pip->pathptr);
-			double_free(pip->pwd);
-			double_free(arg_list);
+			ult_free(pip, arg_list);
 			perror(ptr);
 			free(ptr);
 			exit(126);
 		}
 		ft_piper(pip, fdindex);
-		tmp = execve(arg_list[0], arg_list, envp);
-		koi(ft_itoa(tmp));
+		execve(arg_list[0], arg_list, envp);
 	}
-	else
-	{
-		double_free(arg_list);
-		tmp = ft_reader2(pip, envp, 2, 3);
-	}
-	return (tmp);
+	double_free(arg_list);
+	ft_reader2(pip, envp, 2, 3);
+	return (0);
 }

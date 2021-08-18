@@ -51,4 +51,5 @@ void		koi(char *str);
 void		double_free(char **str);
 char		*copieur(char *s);
 int			len_double(char **str);
+void		ult_free(t_pip *pip, char **arg_list);
 #endif
