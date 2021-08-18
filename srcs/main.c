@@ -84,10 +84,23 @@ int	main(int argc, char *argv[], char *envp[])
 		return (status); */
 /* 	if (!WIFEXITED(status))
 		return (WEXITSTATUS(status)); */
+/* 	if ( WIFEXITED(status) ) {
+        count = WEXITSTATUS(status);
+        if (count != 0)
+			return (count);
+    } */
+	waitpid(pip.pid[0], &status, 0);
+/* 	if ( WIFEXITED(status) ) {
+        count = WEXITSTATUS(status);
+        if (count != 0)
+			return (count);
+    } */
 	waitpid(pip.pid[1], &status, 0);
-	/* if (!WIFEXITED(status))
-		return (WEXITSTATUS(status)); */
-	waitpid(pip.pid[1], &status, 0);
-	return (count2);
+	if ( WIFEXITED(status) ) {
+        count = WEXITSTATUS(status);
+        if (count != 0)
+			return (count);
+    }
+	return (status);
 }
 

@@ -51,9 +51,6 @@ char	*parse_path(char **arg_list, t_pip *pip)
 	tmp = access(arg_list[0], X_OK);
 	if (tmp == 0)
 		return (arg_list[0]);
-/* 	tmp = access(arg_list[0] + 1, X_OK);
-	if (tmp == 0)
-		return (arg_list[0] + 1); */
 	tmp = 1;
 	while (pip->pathptr[count] && tmp != 0)
 	{
@@ -80,34 +77,32 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
-	int waitstatus;
 
 	tmp = 0;
+	arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
+	arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
+/* 	if (arg_list[0][0] != '/')
+			tmp = 127; */
 	if (!(pip->pid[0] = fork()))
 	{
+		if (arg_list[0][0] != '/')
+				exit(127);
 		ft_piper(pip, fdindex);
-		arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
-		arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
-		if (!arg_list[0])
-			return (127);
 		tmp = execve(arg_list[0], arg_list, envp);
 	}
 	else
 	{
-        tmp = WEXITSTATUS(waitstatus);
+		index = 2;
+		fdindex = 3;
+		arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
+		arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
 		if (!(pip->pid[1] = fork()))
 		{
-			index = 2;
-			fdindex = 3;
+			if (arg_list[0][0] != '/')
+				exit(127);
 			ft_piper(pip, fdindex);
-			arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
-			arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
-			if (!arg_list[0])
-				return (127);
 			tmp = execve(arg_list[0], arg_list, envp);
 		}
-		else
-			return (tmp);
 	}
 	return (tmp);
 }
