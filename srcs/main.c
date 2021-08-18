@@ -19,15 +19,9 @@ void	init_pip2(t_pip *pip)
 	if (pip->fd[1] == -1)
 		exit(1);
 	if (pipe(pip->pfd1) == -1)
-	{
-		printf("pipe a echoue \n");
-		ft_stop(pip, "fork");
-	}
+		exit(1);
 	if (pipe(pip->pfd1 + 2) == -1)
-	{
-		printf("pipe a echoue \n");
-		ft_stop(pip, "fork");
-	}
+		exit(1);
 }
 
 void	init_pip(t_pip *pip, char **argv)
@@ -73,8 +67,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc < 5)
 		return (1);
-	envp_init(envp, &pip);
 	init_pip(&pip, argv);
+	envp_init(envp, &pip);
 	count2 = ft_reader(&pip, 1, 0, envp);
 	count = 0;
 	while (count < 4)

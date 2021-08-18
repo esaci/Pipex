@@ -96,7 +96,12 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 	if (!(pip->pid[1]))
 	{
 		if (arg_list[0][0] != '/')
+		{
+			double_free(pip->pathptr);
+			double_free(pip->pwd);
+			double_free(arg_list);
 			exit(127);
+		}
 		ft_piper(pip, fdindex);
 		tmp = execve(arg_list[0], arg_list, envp);
 	}
@@ -116,7 +121,12 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	if (!(pip->pid[0]))
 	{
 		if (arg_list[0][0] != '/')
+		{
+			double_free(pip->pathptr);
+			double_free(pip->pwd);
+			double_free(arg_list);
 			exit(127);
+		}
 		ft_piper(pip, fdindex);
 		execve(arg_list[0], arg_list, envp);
 	}
