@@ -39,7 +39,7 @@ $(NAME) : $(OBJ) $(SRCD)/main.c
 		ar rc $(PIPD)$(PIP) $(OBJ)
 		/bin/rm -f $(LIBFT)
 		ranlib $(PIPD)$(PIP)
-		$(COMPILE) -o $(NAME) $(SRCD)/main.c  $(PIPD)$(PIP) -I$(INCL)
+		$(COMPILE) -o $(NAME) $(SRCD)/main.c  $(PIPD)$(PIP)
 
 clean:
 	rm -rf $(OBJ)
