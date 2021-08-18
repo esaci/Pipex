@@ -81,9 +81,9 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	tmp = 0;
 	arg_list = arg_listeur(pip, index); //split pour les options et ajoute une place de chaine de caractere a la fin pour mettre linterieur du fichier
 	arg_list[0] = parse_path(arg_list, pip); //jutilise le path qui correspond a la commande
-	int fr=0;
+/* 	int fr=0;
 	while (arg_list[fr])
-		koi(arg_list[fr++]);
+		koi(arg_list[fr++]); */
 	if (!(pip->pid[0] = fork()))
 	{
 		if (arg_list[0][0] != '/')

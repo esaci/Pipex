@@ -64,10 +64,9 @@ char	*merge_twoarray(char *s, char *d)
 	return (ptr);
 }
 
-char	**ft_split3(char **d, char **s, int index)
+char	**ft_split3(char **d, char **s, int index, t_pip *pip)
 {
 	int	count2;
-/* 	int fdindex; */
 
 	d[0][0] = '/';
 	count2 = 1;
@@ -76,11 +75,13 @@ char	**ft_split3(char **d, char **s, int index)
 		d[count2] = copieur(s[count2]);
 		count2++;
 	}
-/* 	if ()
-	else */
-	if (1==2)
-		d[index] = 0;
-	d[count2] = NULL;
+	if (index == 1 && pip->fd[0] == -1)
+	{
+		d[count2] = pip->ptr[0];
+		d[++count2] = NULL;
+	}
+	else
+		d[count2] = NULL;
 	/* free(s); */
 	s = d;
 	return (s);
@@ -105,5 +106,5 @@ char	**ft_split2(char **s, t_pip *pip, int index)
 		count++;
 	}
 	d[0][++count] = 0;
-	return (ft_split3(d, s, index));
+	return (ft_split3(d, s, index, pip));
 }
