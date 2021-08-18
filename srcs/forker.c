@@ -14,14 +14,13 @@
 
 pid_t	forker(t_pip *pip)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
-	if(pid == -1)
+	if (pid == -1)
 	{
 		printf("fork a echoue \n");
 		ft_stop(pip, "pid");
 	}
 	return (pid);
 }
-

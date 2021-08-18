@@ -12,8 +12,7 @@
 
 #include "../lib/libpip.h"
 
-
-pid_t		ft_executeur(t_pip *pip)
+pid_t	ft_executeur(t_pip *pip)
 {
 	pid_t	pid;
 

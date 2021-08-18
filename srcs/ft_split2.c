@@ -25,27 +25,24 @@ char	*copieur(char *s)
 		count++;
 	}
 	str[count] = 0;
-	return(str);
+	return (str);
 }
 
-void	full_free(char **str)
+int	len_double(char **str)
 {
-	int count;
+	int		count;
 
 	count = 0;
-	while(str[count])
-	{
-		free(str[count]);
+	while (str[count])
 		count++;
-	}
-	free(str);
+	return (count);
 }
 
 char	*merge_twoarray(char *s, char *d)
 {
-	int count;
-	int count2;
-	char *ptr;
+	int		count;
+	int		count2;
+	char	*ptr;
 
 	if (!s && !d)
 		return (NULL);
@@ -67,41 +64,46 @@ char	*merge_twoarray(char *s, char *d)
 	return (ptr);
 }
 
+char	**ft_split3(char **d, char **s, int index)
+{
+	int	count2;
+/* 	int fdindex; */
+
+	d[0][0] = '/';
+	count2 = 1;
+	while (s[count2])
+	{
+		d[count2] = copieur(s[count2]);
+		count2++;
+	}
+/* 	if ()
+	else */
+	if (1==2)
+		d[index] = 0;
+	d[count2] = NULL;
+	/* free(s); */
+	s = d;
+	return (s);
+}
+
 char	**ft_split2(char **s, t_pip *pip, int index)
 {
 	int		count;
 	char	**d;
-	int		count2;
 
-	count = 0;
-	while(s[count])
-		count++;
-	d = malloc(sizeof(char*) * (count + 2));
+	count = len_double(s);
+	d = malloc(sizeof(char *) * (count + 2));
 	if (!d)
 		ft_stop(pip, "okok");
 	d[0] = malloc(sizeof(char) * (ft_strlen(s[0]) + 2));
+	if (!d[0])
+		ft_stop(pip, "okok");
 	count = 0;
 	while (s[0][count])
 	{
 		d[0][count + 1] = s[0][count];
 		count++;
 	}
-	d[0][0] = '/';
-	count++;
-	d[0][count] = 0;
-	count2 = 1;
-	while(s[count2])
-	{
-		d[count2] = copieur(s[count2]);
-		count2++;
-	}
-	d[count2] = NULL;
-	s = d;
-	return (s);
-	index = (index == 1 ? 0 : 3);
-	d[count2] = pip->ptr[index];
-	count2++;
-	d[count2] = NULL;
-	s = d;
-	return (s);
+	d[0][++count] = 0;
+	return (ft_split3(d, s, index));
 }
