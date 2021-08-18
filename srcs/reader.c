@@ -42,7 +42,7 @@ char	*parse_path2(char **arg_list, t_pip *pip)
 	int		tmp;
 
 	ptr = ft_strjoin(pip->pwd[0], arg_list[0]);
-	tmp = access(ptr, X_OK);
+	tmp = access(ptr, F_OK);
 	if (tmp == 0)
 	{
 		free(arg_list[0]);
@@ -64,14 +64,14 @@ char	*parse_path(char **arg_list, t_pip *pip)
 	char	*ptr;
 
 	count = 0;
-	tmp = access(arg_list[0], X_OK);
+	tmp = access(arg_list[0], F_OK);
 	if (tmp == 0)
 		return (arg_list[0]);
 	tmp = 1;
 	while (pip->pathptr[count] && tmp != 0)
 	{
 		ptr = ft_strjoin(pip->pathptr[count], arg_list[0]);
-		tmp = access(ptr, X_OK);
+		tmp = access(ptr, F_OK);
 		if (tmp != 0)
 			free(ptr);
 		count++;
@@ -88,6 +88,7 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 {
 	char	**arg_list;
 	int		tmp;
+/* 	char	*ptr; */
 
 	tmp = 0;
 	arg_list = arg_listeur(pip, index);
@@ -103,7 +104,13 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 			exit(127);
 		}
 		ft_piper(pip, fdindex);
-		tmp = execve(arg_list[0], arg_list, envp);
+		if (execve(arg_list[0], arg_list, envp) == -1)
+		{
+			double_free(pip->pathptr);
+			double_free(pip->pwd);
+			double_free(arg_list);
+			exit(126);
+		}
 	}
 	double_free(arg_list);
 	return (tmp);
@@ -113,6 +120,7 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	int		tmp;
+/* 	char	*ptr; */
 
 	tmp = 0;
 	arg_list = arg_listeur(pip, index);
@@ -128,7 +136,13 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 			exit(127);
 		}
 		ft_piper(pip, fdindex);
-		execve(arg_list[0], arg_list, envp);
+		if (execve(arg_list[0], arg_list, envp) == -1)
+		{
+			double_free(pip->pathptr);
+			double_free(pip->pwd);
+			double_free(arg_list);
+			exit(126);
+		}
 	}
 	else
 	{
