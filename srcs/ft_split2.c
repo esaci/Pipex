@@ -73,8 +73,11 @@ char	**ft_split3(char **d, char **s, int index, t_pip *pip)
 	while (s[count2])
 	{
 		d[count2] = copieur(s[count2]);
+		free(s[count2]);
 		count2++;
 	}
+	free(s[0]);
+	free(s);
 	if (index == 1 && pip->fd[0] == -1)
 	{
 		d[count2] = pip->ptr[0];
@@ -82,8 +85,7 @@ char	**ft_split3(char **d, char **s, int index, t_pip *pip)
 	}
 	else
 		d[count2] = NULL;
-	s = d;
-	return (s);
+	return (d);
 }
 
 char	**ft_split2(char **s, t_pip *pip, int index)
