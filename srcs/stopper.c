@@ -43,9 +43,10 @@ void	double_free(char **str)
 	free(str);
 }
 
-void	ult_free(t_pip *pip, char **arg_list)
+void	ult_free(t_pip *pip, char **arg_list, int e)
 {
 	double_free(pip->pathptr);
 	double_free(pip->pwd);
 	double_free(arg_list);
+	exit(e);
 }

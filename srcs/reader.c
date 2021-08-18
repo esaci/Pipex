@@ -96,16 +96,14 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 	{
 		if (arg_list[0][0] != '/')
 		{
-			ult_free(pip, arg_list);
-			exit(127);
+			ult_free(pip, arg_list, 127);
 		}
 		if (access(arg_list[0], X_OK) == -1)
 		{
 			ptr = merge_twoarray("command not found: ", pip->ptr[2]);
-			ult_free(pip, arg_list);
 			perror(ptr);
 			free(ptr);
-			exit(0);
+			ult_free(pip, arg_list, 0);
 		}
 		ft_piper(pip, fdindex);
 		execve(arg_list[0], arg_list, envp);
@@ -124,17 +122,13 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 	if (!(pip->pid[0]))
 	{
 		if (arg_list[0][0] != '/')
-		{
-			ult_free(pip, arg_list);
-			exit(127);
-		}
+			ult_free(pip, arg_list, 127);
 		if (access(arg_list[0], X_OK) == -1)
 		{
 			ptr = merge_twoarray("Permission denied: ", arg_list[0]);
-			ult_free(pip, arg_list);
 			perror(ptr);
 			free(ptr);
-			exit(126);
+			ult_free(pip, arg_list, 126);
 		}
 		ft_piper(pip, fdindex);
 		execve(arg_list[0], arg_list, envp);
