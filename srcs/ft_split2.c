@@ -50,7 +50,7 @@ char	*merge_twoarray(char *s, char *d)
 	if (!s && !d)
 		return (NULL);
 	count = ft_strlen(s) + ft_strlen(d);
-	ptr = malloc(sizeof(char) * count);
+	ptr = malloc(sizeof(char) * (count + 1));
 	count = 0;
 	count2 = 0;
 	while (s[count])
