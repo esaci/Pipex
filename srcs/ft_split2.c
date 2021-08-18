@@ -82,7 +82,6 @@ char	**ft_split3(char **d, char **s, int index, t_pip *pip)
 	}
 	else
 		d[count2] = NULL;
-	/* free(s); */
 	s = d;
 	return (s);
 }

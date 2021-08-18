@@ -12,6 +12,24 @@
 
 #include "../lib/libpip.h"
 
+void	init_pip2(t_pip *pip)
+{
+	pip->fd[0] = open(pip->ptr[0], O_RDONLY);
+	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (pip->fd[1] == -1)
+		exit(1);
+	if (pipe(pip->pfd1) == -1)
+	{
+		printf("pipe a echoue \n");
+		ft_stop(pip, "fork");
+	}
+	if (pipe(pip->pfd1 + 2) == -1)
+	{
+		printf("pipe a echoue \n");
+		ft_stop(pip, "fork");
+	}
+}
+
 void	init_pip(t_pip *pip, char **argv)
 {
 	int	count;
@@ -28,27 +46,22 @@ void	init_pip(t_pip *pip, char **argv)
 		pip->pid[count] = -2;
 		count++;
 	}
-	pip->fd[0] = open(pip->ptr[0], O_RDONLY);
-/* 	pip->tmp[1] = access(pip->ptr[3], ) */
-//	O_APPEND pour ajouter a la fin
-	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (pip->fd[1] == -1)
-		exit(1);
-	if (pipe(pip->pfd1) == -1)
+	init_pip2(pip);
+}
+
+void	envp_init(char **envp, t_pip *pip)
+{
+	int	count;
+
+	count = 0;
+	while (envp[count])
 	{
-		printf("pipe a echoue \n");
-		ft_stop(pip, "fork");
+		if (!ft_memcmp(envp[count], "PATH", 4))
+			pip->pathptr = ft_split(envp[count] + 5, ':');
+		if (!ft_memcmp(envp[count], "PWD", 3))
+			pip->pwd = ft_split(envp[count] + 4, 1);
+		count++;
 	}
-	if (pipe(pip->pfd1 + 2) == -1)
-	{
-		printf("pipe a echoue \n");
-		ft_stop(pip, "fork");
-	}
-  // cmd1 scores | cmd2 Villanova | cmd3 1-10
-  // pip->pfd1[0] = read end of cmd1 pipe (read by cmd2)
-  // pip->pfd1[1] = write end of cmd2 pipe (written by cmd1)
-  // pip->pfd1[2] = read end of cmd2 pipe (read by cmd3)
-  // pip->pfd1[3] = write end of cmd3 pipe (written by cmd2)
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -58,20 +71,11 @@ int	main(int argc, char *argv[], char *envp[])
 	int		count2;
 	int		status;
 
-
 	if (argc < 5)
 	{
 		return (1);
 	}
-	count = 0;
-	while (envp[count])
-	{
-		if (!ft_memcmp(envp[count], "PATH", 4))
-			pip.pathptr = ft_split(envp[count] + 5, ':');
-		if (!ft_memcmp(envp[count], "PWD", 3))
-			pip.pwd = ft_split(envp[count] + 4, 1);
-		count++;
-	}
+	envp_init(envp, &pip);
 	init_pip(&pip, argv);
 	count2 = ft_reader(&pip, 1, 0, envp);
 	count = 0;
@@ -79,11 +83,11 @@ int	main(int argc, char *argv[], char *envp[])
 		close(pip.pfd1[count++]);
 	waitpid(pip.pid[0], &status, 0);
 	waitpid(pip.pid[1], &status, 0);
-	if ( WIFEXITED(status) ) {
-        count = WEXITSTATUS(status);
-        if (count != 0)
+	if (WIFEXITED(status))
+	{
+		count = WEXITSTATUS(status);
+		if (count != 0)
 			return (count);
-    }
+	}
 	return (status);
 }
-
