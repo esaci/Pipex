@@ -29,3 +29,8 @@ void	ft_stop(t_pip *pip, char *str)
 	printf("%s est le msg d'erreur\n", str);
 	exit(1);
 }
+
+void	elias(char **str)
+{
+	str = 0;
+}
