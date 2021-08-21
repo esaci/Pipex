@@ -23,7 +23,7 @@ void	print_error(char	*ptr)
 	write(2, "\n", 1);
 }
 
-void	ft_stop(t_pip *pip, char *str, char **arg_list)
+int		ft_stop(t_pip *pip, char *str, char **arg_list)
 {
 	char	*ptr;
 
@@ -31,17 +31,22 @@ void	ft_stop(t_pip *pip, char *str, char **arg_list)
 	{
 		ptr = merge_twoarray("command not found: ", arg_list[0]);
 		print_error(ptr);
+/* 		double_free(arg_list);
+		return (pip->tmp[0]); */
 	}
 	if (!ft_memcmp(str, "execve", 6) && pip->pid[1] < 0)
 	{
 		ptr = strerror(errno);
 		perror(pip->ptr[0]);
+/* 		double_free(arg_list);
+		return (pip->tmp[0]); */
 	}
 	else if (!ft_memcmp(str, "execve", 6))
 	{
 		ptr = strerror(errno);
 		perror(pip->ptr[3]);
 	}
+	return (0);
 }
 
 void	double_free(char **str)

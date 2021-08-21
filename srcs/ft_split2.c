@@ -96,10 +96,10 @@ char	**ft_split2(char **s, t_pip *pip, int index)
 	count = len_double(s);
 	d = malloc(sizeof(char *) * (count + 2));
 	if (!d)
-		ft_stop(pip, "okok");
+		ft_stop(pip, "okok", NULL);
 	d[0] = malloc(sizeof(char) * (ft_strlen(s[0]) + 2));
 	if (!d[0])
-		ft_stop(pip, "okok");
+		ft_stop(pip, "okok", NULL);
 	count = 0;
 	while (s[0][count])
 	{

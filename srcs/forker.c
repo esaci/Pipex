@@ -20,7 +20,7 @@ pid_t	forker(t_pip *pip)
 	if (pid == -1)
 	{
 		printf("fork a echoue \n");
-		ft_stop(pip, "pid");
+		ft_stop(pip, "pid", NULL);
 	}
 	return (pid);
 }
