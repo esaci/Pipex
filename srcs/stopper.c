@@ -19,15 +19,23 @@ void	koi(char *str)
 
 void	ft_stop(t_pip *pip, char *str)
 {
-	int	count;
+	char	*ptr;
 
-	count = 0;
-	while (pip->ptr[count])
+	if (1 == 2)
+		pip->tmp[1] = 'e';
+	if (!ft_memcmp(str, "execve", 6) && pip->pid[1] < 0)
 	{
-		count++;
+		ptr = strerror(errno);
+		perror(pip->ptr[0]);
+		exit(0);
 	}
-	printf("%s est le msg d'erreur\n", str);
-	exit(1);
+	else if (!ft_memcmp(str, "execve", 6))
+	{
+		ptr = strerror(errno);
+		perror(pip->ptr[3]);
+		exit(0);
+	}
+	exit(0);
 }
 
 void	double_free(char **str)

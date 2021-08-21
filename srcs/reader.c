@@ -94,10 +94,11 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 	pip->pid[1] = fork();
 	if (!(pip->pid[1]))
 	{
+		pip->tmp[1] = open("/dev/null", O_WRONLY);
+		dup2(pip->tmp[1], 2);
+		close(pip->tmp[1]);
 		if (arg_list[0][0] != '/')
-		{
 			ult_free(pip, arg_list, 127);
-		}
 		if (access(arg_list[0], X_OK) == -1)
 		{
 			ptr = merge_twoarray("command not found: ", pip->ptr[2]);
@@ -107,6 +108,7 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 		}
 		ft_piper(pip, fdindex);
 		execve(arg_list[0], arg_list, envp);
+			ft_stop(pip, "execve");
 	}
 	double_free(arg_list);
 	return (0);
@@ -116,11 +118,15 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
 	char	*ptr;
+	int		status;
 
 	arg_list = arg_listeur(pip, index);
 	pip->pid[0] = fork();
 	if (!(pip->pid[0]))
 	{
+		pip->tmp[1] = open("/dev/null", O_WRONLY);
+		dup2(pip->tmp[1], 2);
+		close(pip->tmp[1]);
 		if (arg_list[0][0] != '/')
 			ult_free(pip, arg_list, 127);
 		if (access(arg_list[0], X_OK) == -1)
@@ -131,7 +137,15 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 			ult_free(pip, arg_list, 126);
 		}
 		ft_piper(pip, fdindex);
-		execve(arg_list[0], arg_list, envp);
+		if (execve(arg_list[0], arg_list, envp) == -1)
+			exit(0);
+	}
+	waitpid(pip->pid[0], &status, 0);
+	if (WIFEXITED(status))
+	{
+		pip->tmp[0] = WEXITSTATUS(status);
+		if (pip->tmp[0] != 0)
+			ft_stop(pip, "execve");
 	}
 	double_free(arg_list);
 	ft_reader2(pip, envp, 2, 3);
