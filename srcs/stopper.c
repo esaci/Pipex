@@ -31,16 +31,18 @@ int	ft_stop(t_pip *pip, char *str, char **arg_list, int mode)
 	{
 		ptr = merge_twoarray("command not found: ", arg_list[0]);
 		print_error(ptr);
+		free(ptr);
 	}
 	if (!ft_memcmp(str, "XNOTOK", 6))
 	{
 		ptr = merge_twoarray("permission denied: ", arg_list[0]);
 		print_error(ptr);
+		free(ptr);
 	}
 	if (!ft_memcmp(str, "execve", 6))
 	{
 		ptr = strerror(errno);
-		perror(pip->ptr[(mode - 1) * 3]);
+		perror(pip->ptr[(mode - 1)*3]);
 	}
 	return (0);
 }

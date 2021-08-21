@@ -62,6 +62,7 @@ int	waiter_error(t_pip *pip, int index, int pid)
 {
 	int		status;
 	char	**arg_list;
+
 	arg_list = arg_listeur(pip, index);
 	waitpid(pip->pid[pid], &status, 0);
 	if (WIFEXITED(status))
@@ -100,32 +101,5 @@ int	main(int argc, char *argv[], char *envp[])
 	while (count < 4)
 		close(pip.pfd1[count++]);
 	waiter_error(&pip, 1, 0);
-	return(waiter_error(&pip, 2, 1));
-	/* arg_list = arg_listeur(&pip, 1);
-	waitpid(pip.pid[0], &status, 0);
-	if (WIFEXITED(status))
-	{
-		pip.tmp[0] = WEXITSTATUS(status);
-		if (access(arg_list[0], F_OK) == -1)
-			ft_stop(&pip, "FNOTOK", arg_list);
-		else if (access(arg_list[0], X_OK) == -1)
-			ft_stop(&pip, "XNOTOK", arg_list);
-		else if (pip.tmp[0] != 0)
-			ft_stop(&pip, "execve", arg_list);
-	}
-	arg_list = arg_listeur(&pip, 2);
-	waitpid(pip.pid[1], &status, 0);
-	if (WIFEXITED(status))
-	{
-		pip.tmp[0] = WEXITSTATUS(status);
-		if (access(arg_list[0], F_OK) == -1)
-			ft_stop(&pip, "FNOTOK", arg_list);
-		else if (access(arg_list[0], X_OK) == -1)
-			ft_stop(&pip, "XNOTOK", arg_list);
-		if (pip.tmp[0] == 127)
-			ft_stop(&pip, "execve", arg_list);
-	}
-	double_free(pip.pathptr);
-	double_free(pip.pwd);
-	return (pip.tmp[0]); */
+	return (waiter_error(&pip, 2, 1));
 }
