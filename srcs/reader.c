@@ -103,7 +103,7 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 			ptr = merge_twoarray("command not found: ", pip->ptr[2]);
 			perror(ptr);
 			free(ptr);
-			ult_free(pip, arg_list, 0);
+			ult_free(pip, arg_list, 1);
 		}
 		ft_piper(pip, fdindex);
 		execve(arg_list[0], arg_list, envp);
