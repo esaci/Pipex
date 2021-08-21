@@ -91,8 +91,10 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc < 5)
 		return (1);
-	init_pip(&pip, argv);
 	envp_init(envp, &pip);
+	if (argc > 5)
+		return(bonus_main(argc, argv, envp, &pip));
+	init_pip(&pip, argv);
 	count2 = ft_reader(&pip, 1, 0, envp);
 	count = 0;
 	while (count < 4)

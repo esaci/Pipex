@@ -38,6 +38,8 @@ typedef struct s_pip
 	char	**pwd;
 	int		pfd1[4];
 	char	*tmptr;
+	char	**b_ptr;
+	int		b_ac;
 }	t_pip;
 
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
@@ -55,4 +57,7 @@ int			len_double(char **str);
 void		ult_free(t_pip *pip, char **arg_list, int e);
 void		print_error(char	*ptr);
 char		**arg_listeur(t_pip *pip, int index);
+char		*parse_path(char **arg_list, t_pip *pip);
+int			bonus_main(int argc, char *argv[], char *envp[], t_pip *pip);
+void		bonus_reader(t_pip *pip, int index, char *envp[]);
 #endif
