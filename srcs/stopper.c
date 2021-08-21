@@ -27,21 +27,22 @@ int		ft_stop(t_pip *pip, char *str, char **arg_list)
 {
 	char	*ptr;
 
-	if (!ft_memcmp(str, "XNOTOK", 6))
+	if (!ft_memcmp(str, "FNOTOK", 6))
 	{
 		ptr = merge_twoarray("command not found: ", arg_list[0]);
 		print_error(ptr);
-/* 		double_free(arg_list);
-		return (pip->tmp[0]); */
 	}
-	if (!ft_memcmp(str, "execve", 6) && pip->pid[1] < 0)
+	if (!ft_memcmp(str, "XNOTOK", 6))
+	{
+		ptr = merge_twoarray("permission denied: ", arg_list[0]);
+		print_error(ptr);
+	}
+	if (!ft_memcmp(str, "execve1", 7))
 	{
 		ptr = strerror(errno);
 		perror(pip->ptr[0]);
-/* 		double_free(arg_list);
-		return (pip->tmp[0]); */
 	}
-	else if (!ft_memcmp(str, "execve", 6))
+	else if (!ft_memcmp(str, "execve2", 7))
 	{
 		ptr = strerror(errno);
 		perror(pip->ptr[3]);

@@ -62,17 +62,43 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_pip	pip;
 	int		count;
+	int		count2;
 	int		status;
+	char	**arg_list;
 
 	if (argc < 5)
 		return (1);
 	init_pip(&pip, argv);
 	envp_init(envp, &pip);
-	status = ft_reader(&pip, 1, 0, envp);
+	count2 = ft_reader(&pip, 1, 0, envp);
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
+	arg_list = arg_listeur(&pip, 1);
+	waitpid(pip.pid[0], &status, 0);
+	if (WIFEXITED(status))
+	{
+		pip.tmp[0] = WEXITSTATUS(status);
+		if (access(arg_list[0], F_OK) == -1)
+			ft_stop(&pip, "FNOTOK1", arg_list);
+		else if (access(arg_list[0], X_OK) == -1)
+			ft_stop(&pip, "XNOTOK1", arg_list);
+		else if (pip.tmp[0] != 0)
+			ft_stop(&pip, "execve1", arg_list);
+	}
+	arg_list = arg_listeur(&pip, 2);
+	waitpid(pip.pid[1], &status, 0);
+	if (WIFEXITED(status))
+	{
+		pip.tmp[0] = WEXITSTATUS(status);
+		if (access(arg_list[0], F_OK) == -1)
+			ft_stop(&pip, "FNOTOK2", arg_list);
+		else if (access(arg_list[0], X_OK) == -1)
+			ft_stop(&pip, "XNOTOK2", arg_list);
+		if (pip.tmp[0] == 127)
+			ft_stop(&pip, "execve2", arg_list);
+	}
 	double_free(pip.pathptr);
 	double_free(pip.pwd);
-	return (status);
+	return (pip.tmp[0]);
 }

@@ -53,4 +53,5 @@ char		*copieur(char *s);
 int			len_double(char **str);
 void		ult_free(t_pip *pip, char **arg_list, int e);
 void		print_error(char	*ptr);
+char		**arg_listeur(t_pip *pip, int index);
 #endif
