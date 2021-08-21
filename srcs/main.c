@@ -62,26 +62,17 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_pip	pip;
 	int		count;
-	int		count2;
 	int		status;
 
 	if (argc < 5)
 		return (1);
 	init_pip(&pip, argv);
 	envp_init(envp, &pip);
-	count2 = ft_reader(&pip, 1, 0, envp);
+	status = ft_reader(&pip, 1, 0, envp);
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
-	waitpid(pip.pid[0], &status, 0);
-	waitpid(pip.pid[1], &status, 0);
 	double_free(pip.pathptr);
 	double_free(pip.pwd);
-	if (WIFEXITED(status))
-	{
-		count = WEXITSTATUS(status);
-		if (count != 0)
-			return (count);
-	}
 	return (status);
 }

@@ -25,9 +25,9 @@ char	*parse_path2(char **arg_list, t_pip *pip)
 		return (ptr);
 	}
 	free(ptr);
-	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
+/* 	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
 	perror(ptr);
-	free(ptr);
+	free(ptr); */
 	ptr = copieur(arg_list[0] + 1);
 	free(arg_list[0]);
 	return (ptr);
@@ -88,7 +88,7 @@ char	**arg_listeur(t_pip *pip, int index)
 int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 {
 	char	**arg_list;
-	char	*ptr;
+	int		status;
 
 	arg_list = arg_listeur(pip, index);
 	pip->pid[1] = fork();
@@ -99,34 +99,29 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 		close(pip->tmp[1]);
 		if (arg_list[0][0] != '/')
 			ult_free(pip, arg_list, 127);
-		if (access(arg_list[0], X_OK) == -1)
-		{
-			ptr = merge_twoarray("command not found: ", pip->ptr[2]);
-			perror(ptr);
-			free(ptr);
-			ult_free(pip, arg_list, 1);
-		}
 		ft_piper(pip, fdindex);
-		execve(arg_list[0], arg_list, envp);
+/* 		if (access(arg_list[0], X_OK) == -1)
+			exit(127); */
+		if (execve(arg_list[0], arg_list, envp) == -1)
+			exit(1);
 	}
-/* 	waitpid(pip->pid[1], &status, 0);
+/* 	waitpid(pip->pid[1], &status, 0); */
 	if (WIFEXITED(status))
 	{
 		pip->tmp[0] = WEXITSTATUS(status);
 		if (access(arg_list[0], X_OK) == -1)
-			ft_stop(pip, "XNOTOK2");
+			ft_stop(pip, "XNOTOK", arg_list);
 		if (pip->tmp[0] != 0)
-			ft_stop(pip, "execve");
-	} */
+			ft_stop(pip, "execve", arg_list);
+	}
 	double_free(arg_list);
-	return (0);
+	return (pip->tmp[0]);
 }
 
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
-/* 	int		status; */
-	char	*ptr;
+	int		status;
 
 	arg_list = arg_listeur(pip, index);
 	pip->pid[0] = fork();
@@ -137,26 +132,19 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		close(pip->tmp[1]);
 		if (arg_list[0][0] != '/')
 			ult_free(pip, arg_list, 127);
-		if (access(arg_list[0], X_OK) == -1)
-		{
-			ptr = merge_twoarray("Permission denied: ", arg_list[0]);
-			perror(ptr);
-			free(ptr);
-			ult_free(pip, arg_list, 126);
-		}
 		ft_piper(pip, fdindex);
-		execve(arg_list[0], arg_list, envp);
+		if (execve(arg_list[0], arg_list, envp) == -1)
+			exit(1);
 	}
-/* 	waitpid(pip->pid[0], &status, 0);
+	waitpid(pip->pid[0], &status, 0);
 	if (WIFEXITED(status))
 	{
 		pip->tmp[0] = WEXITSTATUS(status);
 		if (access(arg_list[0], X_OK) == -1)
-			ft_stop(pip, "XNOTOK1");
+			ft_stop(pip, "XNOTOK1", arg_list);
 		else if (pip->tmp[0] != 0)
-			ft_stop(pip, "execve");
-	} */
+			ft_stop(pip, "execve", arg_list);
+	}
 	double_free(arg_list);
-	ft_reader2(pip, envp, 2, 3);
-	return (0);
+	return (ft_reader2(pip, envp, 2, 3));
 }

@@ -17,35 +17,31 @@ void	koi(char *str)
 	printf("|%s|\n", str);
 }
 
-void	ft_stop(t_pip *pip, char *str)
+void	print_error(char	*ptr)
+{
+	write(2, ptr, ft_strlen(ptr));
+	write(2, "\n", 1);
+}
+
+void	ft_stop(t_pip *pip, char *str, char **arg_list)
 {
 	char	*ptr;
 
-	if (!ft_memcmp(str, "XNOTOK1", 7))
+	if (!ft_memcmp(str, "XNOTOK", 6))
 	{
-		ptr = merge_twoarray("Permission denied: ", pip->ptr[0]);
-		perror(ptr);
-		free(ptr);
-	}
-	if (!ft_memcmp(str, "XNOTOK2", 7))
-	{
-		ptr = merge_twoarray("command not found: ", pip->ptr[2]);
-		perror(ptr);
-		free(ptr);
+		ptr = merge_twoarray("command not found: ", arg_list[0]);
+		print_error(ptr);
 	}
 	if (!ft_memcmp(str, "execve", 6) && pip->pid[1] < 0)
 	{
 		ptr = strerror(errno);
 		perror(pip->ptr[0]);
-		exit(0);
 	}
 	else if (!ft_memcmp(str, "execve", 6))
 	{
 		ptr = strerror(errno);
 		perror(pip->ptr[3]);
-		exit(0);
 	}
-	exit(0);
 }
 
 void	double_free(char **str)

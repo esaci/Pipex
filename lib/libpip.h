@@ -41,7 +41,7 @@ typedef struct s_pip
 
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
 char		**ft_split2(char **s, t_pip *pip, int index);
-void		ft_stop(t_pip *pip, char *str);
+void		ft_stop(t_pip *pip, char *str, char **arg_list);
 pid_t		forker(t_pip *pip);
 pid_t		ft_executeur(t_pip *pip);
 int			ft_piper(t_pip *pip, int fdindex);
@@ -52,4 +52,5 @@ void		double_free(char **str);
 char		*copieur(char *s);
 int			len_double(char **str);
 void		ult_free(t_pip *pip, char **arg_list, int e);
+void		print_error(char	*ptr);
 #endif
