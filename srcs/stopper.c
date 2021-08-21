@@ -21,8 +21,18 @@ void	ft_stop(t_pip *pip, char *str)
 {
 	char	*ptr;
 
-	if (1 == 2)
-		pip->tmp[1] = 'e';
+	if (!ft_memcmp(str, "XNOTOK1", 7))
+	{
+		ptr = merge_twoarray("Permission denied: ", pip->ptr[0]);
+		perror(ptr);
+		free(ptr);
+	}
+	if (!ft_memcmp(str, "XNOTOK2", 7))
+	{
+		ptr = merge_twoarray("command not found: ", pip->ptr[2]);
+		perror(ptr);
+		free(ptr);
+	}
 	if (!ft_memcmp(str, "execve", 6) && pip->pid[1] < 0)
 	{
 		ptr = strerror(errno);

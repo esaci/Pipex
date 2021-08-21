@@ -108,8 +108,16 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 		}
 		ft_piper(pip, fdindex);
 		execve(arg_list[0], arg_list, envp);
-			ft_stop(pip, "execve");
 	}
+/* 	waitpid(pip->pid[1], &status, 0);
+	if (WIFEXITED(status))
+	{
+		pip->tmp[0] = WEXITSTATUS(status);
+		if (access(arg_list[0], X_OK) == -1)
+			ft_stop(pip, "XNOTOK2");
+		if (pip->tmp[0] != 0)
+			ft_stop(pip, "execve");
+	} */
 	double_free(arg_list);
 	return (0);
 }
@@ -117,8 +125,8 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 {
 	char	**arg_list;
+/* 	int		status; */
 	char	*ptr;
-	int		status;
 
 	arg_list = arg_listeur(pip, index);
 	pip->pid[0] = fork();
@@ -137,16 +145,17 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 			ult_free(pip, arg_list, 126);
 		}
 		ft_piper(pip, fdindex);
-		if (execve(arg_list[0], arg_list, envp) == -1)
-			exit(0);
+		execve(arg_list[0], arg_list, envp);
 	}
-	waitpid(pip->pid[0], &status, 0);
+/* 	waitpid(pip->pid[0], &status, 0);
 	if (WIFEXITED(status))
 	{
 		pip->tmp[0] = WEXITSTATUS(status);
-		if (pip->tmp[0] != 0)
+		if (access(arg_list[0], X_OK) == -1)
+			ft_stop(pip, "XNOTOK1");
+		else if (pip->tmp[0] != 0)
 			ft_stop(pip, "execve");
-	}
+	} */
 	double_free(arg_list);
 	ft_reader2(pip, envp, 2, 3);
 	return (0);
