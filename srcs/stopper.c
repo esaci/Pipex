@@ -23,7 +23,7 @@ void	print_error(char	*ptr)
 	write(2, "\n", 1);
 }
 
-int		ft_stop(t_pip *pip, char *str, char **arg_list)
+int	ft_stop(t_pip *pip, char *str, char **arg_list, int mode)
 {
 	char	*ptr;
 
@@ -37,15 +37,10 @@ int		ft_stop(t_pip *pip, char *str, char **arg_list)
 		ptr = merge_twoarray("permission denied: ", arg_list[0]);
 		print_error(ptr);
 	}
-	if (!ft_memcmp(str, "execve1", 7))
+	if (!ft_memcmp(str, "execve", 6))
 	{
 		ptr = strerror(errno);
-		perror(pip->ptr[0]);
-	}
-	else if (!ft_memcmp(str, "execve2", 7))
-	{
-		ptr = strerror(errno);
-		perror(pip->ptr[3]);
+		perror(pip->ptr[(mode - 1) * 3]);
 	}
 	return (0);
 }

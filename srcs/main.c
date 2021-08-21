@@ -58,13 +58,38 @@ void	envp_init(char **envp, t_pip *pip)
 	}
 }
 
+int	waiter_error(t_pip *pip, int index, int pid)
+{
+	int		status;
+	char	**arg_list;
+	arg_list = arg_listeur(pip, index);
+	waitpid(pip->pid[pid], &status, 0);
+	if (WIFEXITED(status))
+	{
+		pip->tmp[0] = WEXITSTATUS(status);
+		if (access(arg_list[0], F_OK) == -1)
+			ft_stop(pip, "FNOTOK", arg_list, index);
+		else if (access(arg_list[0], X_OK) == -1)
+			ft_stop(pip, "XNOTOK", arg_list, index);
+		else if (pip->tmp[0] != 0 && index == 1)
+			ft_stop(pip, "execve", arg_list, index);
+		else if (pip->tmp[0] == 127 && index == 2)
+			ft_stop(pip, "execve", arg_list, index);
+	}
+	double_free(arg_list);
+	if (index == 2)
+	{
+		double_free(pip->pathptr);
+		double_free(pip->pwd);
+	}
+	return (pip->tmp[0]);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_pip	pip;
 	int		count;
 	int		count2;
-	int		status;
-	char	**arg_list;
 
 	if (argc < 5)
 		return (1);
@@ -74,17 +99,19 @@ int	main(int argc, char *argv[], char *envp[])
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
-	arg_list = arg_listeur(&pip, 1);
+	waiter_error(&pip, 1, 0);
+	return(waiter_error(&pip, 2, 1));
+	/* arg_list = arg_listeur(&pip, 1);
 	waitpid(pip.pid[0], &status, 0);
 	if (WIFEXITED(status))
 	{
 		pip.tmp[0] = WEXITSTATUS(status);
 		if (access(arg_list[0], F_OK) == -1)
-			ft_stop(&pip, "FNOTOK1", arg_list);
+			ft_stop(&pip, "FNOTOK", arg_list);
 		else if (access(arg_list[0], X_OK) == -1)
-			ft_stop(&pip, "XNOTOK1", arg_list);
+			ft_stop(&pip, "XNOTOK", arg_list);
 		else if (pip.tmp[0] != 0)
-			ft_stop(&pip, "execve1", arg_list);
+			ft_stop(&pip, "execve", arg_list);
 	}
 	arg_list = arg_listeur(&pip, 2);
 	waitpid(pip.pid[1], &status, 0);
@@ -92,13 +119,13 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		pip.tmp[0] = WEXITSTATUS(status);
 		if (access(arg_list[0], F_OK) == -1)
-			ft_stop(&pip, "FNOTOK2", arg_list);
+			ft_stop(&pip, "FNOTOK", arg_list);
 		else if (access(arg_list[0], X_OK) == -1)
-			ft_stop(&pip, "XNOTOK2", arg_list);
+			ft_stop(&pip, "XNOTOK", arg_list);
 		if (pip.tmp[0] == 127)
-			ft_stop(&pip, "execve2", arg_list);
+			ft_stop(&pip, "execve", arg_list);
 	}
 	double_free(pip.pathptr);
 	double_free(pip.pwd);
-	return (pip.tmp[0]);
+	return (pip.tmp[0]); */
 }

@@ -25,9 +25,6 @@ char	*parse_path2(char **arg_list, t_pip *pip)
 		return (ptr);
 	}
 	free(ptr);
-/* 	ptr = merge_twoarray("command not found: ", arg_list[0] + 1);
-	perror(ptr);
-	free(ptr); */
 	ptr = copieur(arg_list[0] + 1);
 	free(arg_list[0]);
 	return (ptr);
@@ -99,10 +96,8 @@ int	ft_reader2(t_pip *pip, char **envp, int index, int fdindex)
 		if (arg_list[0][0] != '/')
 			ult_free(pip, arg_list, 127);
 		ft_piper(pip, fdindex);
-/* 		int tmp = execve(arg_list[0], arg_list, envp);
-		exit(tmp); */
 		if (execve(arg_list[0], arg_list, envp) == -1)
-			exit (1);
+			ult_free(pip, arg_list, 1);
 	}
 	double_free(arg_list);
 	return (0);
@@ -122,10 +117,8 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		if (arg_list[0][0] != '/')
 			ult_free(pip, arg_list, 127);
 		ft_piper(pip, fdindex);
-/* 		int tmp = execve(arg_list[0], arg_list, envp);
-		exit(tmp); */
 		if (execve(arg_list[0], arg_list, envp) == -1)
-			exit (1);
+			ult_free(pip, arg_list, 1);
 	}
 	double_free(arg_list);
 	return (ft_reader2(pip, envp, 2, 3));
