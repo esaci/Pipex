@@ -37,6 +37,7 @@ typedef struct s_pip
 	char	**pathptr;
 	char	**pwd;
 	int		pfd1[4];
+	char	*tmptr;
 }	t_pip;
 
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);

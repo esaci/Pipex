@@ -117,6 +117,8 @@ int	ft_reader(t_pip *pip, int index, int fdindex, char **envp)
 		if (arg_list[0][0] != '/')
 			ult_free(pip, arg_list, 127);
 		ft_piper(pip, fdindex);
+		if (access(pip->ptr[0], R_OK) == -1)
+			ult_free(pip, arg_list, 1);
 		if (execve(arg_list[0], arg_list, envp) == -1)
 			ult_free(pip, arg_list, 1);
 	}

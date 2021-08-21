@@ -72,17 +72,14 @@ int	waiter_error(t_pip *pip, int index, int pid)
 			ft_stop(pip, "FNOTOK", arg_list, index);
 		else if (access(arg_list[0], X_OK) == -1)
 			ft_stop(pip, "XNOTOK", arg_list, index);
+		else if (access(pip->ptr[0], R_OK) == -1 && index == 1)
+			ft_stop(pip, "RNOTOK", arg_list, index);
 		else if (pip->tmp[0] != 0 && index == 1)
 			ft_stop(pip, "execve", arg_list, index);
 		else if (pip->tmp[0] == 127 && index == 2)
 			ft_stop(pip, "execve", arg_list, index);
 	}
 	double_free(arg_list);
-	if (index == 2)
-	{
-		double_free(pip->pathptr);
-		double_free(pip->pwd);
-	}
 	return (pip->tmp[0]);
 }
 
@@ -101,5 +98,8 @@ int	main(int argc, char *argv[], char *envp[])
 	while (count < 4)
 		close(pip.pfd1[count++]);
 	waiter_error(&pip, 1, 0);
-	return (waiter_error(&pip, 2, 1));
+	waiter_error(&pip, 2, 1);
+	double_free(pip.pathptr);
+	double_free(pip.pwd);
+	return (pip.tmp[0]);
 }
