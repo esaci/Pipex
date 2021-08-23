@@ -44,24 +44,24 @@ void	bonus_closer(t_pip *pip, int index)
 	value = index % 3;
 	if (value == 0)
 	{
-		close(pip->pfd1[3]);
-		close(pip->pfd1[2]);
-		close(pip->pfd1[0]);
-		close(pip->pfd1[1]);
+		if (pipe(pip->pfd1 + 4) == -1)
+			exit(1);
+		close(pip->pfd1[4]);
+		close(pip->pfd1[5]);
 	}
 	if (value == 1)
 	{
-		close(pip->pfd1[2]);
-		close(pip->pfd1[3]);
-		close(pip->pfd1[4]);
-		close(pip->pfd1[5]);
+		close(pip->pfd1[0]);
+		close(pip->pfd1[1]);
+		if (pipe(pip->pfd1) == -1)
+			exit(1);
 	}
 	if (value == 2)
 	{
-		close(pip->pfd1[4]);
-		close(pip->pfd1[5]);
-		close(pip->pfd1[0]);
-		close(pip->pfd1[1]);
+		if (pipe(pip->pfd1 + 2) == -1)
+			exit(1);
+		close(pip->pfd1[2]);
+		close(pip->pfd1[3]);
 	}
 }
 int		bonus_reader(t_pip *pip, int index, char *envp[])
@@ -83,7 +83,7 @@ int		bonus_reader(t_pip *pip, int index, char *envp[])
 		if (execve(arg_list[0], arg_list, envp) == -1)
 			bonus_ult_free(pip, arg_list, 1);
 	}
-	/* bonus_closer(pip, index); */
+	bonus_closer(pip, index);
 	double_free(arg_list);
 	return (1);
 	/* if (index == argc - 3)

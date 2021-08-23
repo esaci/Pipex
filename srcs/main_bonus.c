@@ -47,20 +47,26 @@ int	bonus_waiter_error(t_pip *pip, int index)
 {
 	int		status;
 	char	**arg_list;
+	char	*ptr;
 
 	arg_list = bonus_arg_listeur(pip, index);
 	waitpid(pip->b_pid[index], &status, 0);
 	if (WIFEXITED(status))
 	{
 		pip->tmp[0] = WEXITSTATUS(status);
-		if (access(arg_list[0], F_OK) == -1)
+		if (pip->tmp[0] != 0)
+		{
+			ptr = strerror(errno);
+			perror(ptr);
+		}
+		/* if (access(arg_list[0], F_OK) == -1)
 			ft_stop(pip, "FNOTOK", arg_list, index);
 		else if (access(arg_list[0], X_OK) == -1)
 			ft_stop(pip, "XNOTOK", arg_list, index);
 		else if (access(pip->b_ptr[0], R_OK) == -1)
 			ft_stop(pip, "RNOTOK", arg_list, index);
 		else if (pip->tmp[0] != 0)
-			ft_stop(pip, "execve", arg_list, index);
+			ft_stop(pip, "execve", arg_list, index); */
 	}
 	double_free(arg_list);
 	return (pip->tmp[0]);
@@ -68,12 +74,15 @@ int	bonus_waiter_error(t_pip *pip, int index)
 
 int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 {
-/* 	int		index; */
+	int		index;
 
 	init_pip_bonus(pip, argv, argc);
-	int index = 1;
+	index = 1;
 	while (index < (argc - 2))
 		index += bonus_reader(pip, index, envp);
+	index = 1;
+	while (index < 6)
+		close(pip->pfd1[index++]);
 /* 	bonus_reader(pip, 1, envp); */
 /* 	bonus_reader(pip, 2, envp); */
 /* 	index = 1;
