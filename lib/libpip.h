@@ -36,10 +36,11 @@ typedef struct s_pip
 	int		tmp[2];
 	char	**pathptr;
 	char	**pwd;
-	int		pfd1[4];
+	int		pfd1[6];
 	char	*tmptr;
 	char	**b_ptr;
 	int		b_ac;
+	int		*b_pid;
 }	t_pip;
 
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
@@ -49,6 +50,7 @@ pid_t		forker(t_pip *pip);
 pid_t		ft_executeur(t_pip *pip);
 int			ft_piper(t_pip *pip, int fdindex);
 int			file_reader(int fd, char **arg_list);
+int			ft_reader2(t_pip *pip, char **envp, int index, int fdindex);
 char		*merge_twoarray(char *s, char *d);
 void		koi(char *str);
 void		double_free(char **str);
@@ -58,6 +60,11 @@ void		ult_free(t_pip *pip, char **arg_list, int e);
 void		print_error(char	*ptr);
 char		**arg_listeur(t_pip *pip, int index);
 char		*parse_path(char **arg_list, t_pip *pip);
+int			waiter_error(t_pip *pip, int index, int pid);
 int			bonus_main(int argc, char *argv[], char *envp[], t_pip *pip);
-void		bonus_reader(t_pip *pip, int index, char *envp[]);
+int			bonus_reader(t_pip *pip, int index, char **envp);
+/* int			bonus_reader(t_pip *pip, int index, int fdindex, char **envp); */
+int			bonus_piper(t_pip *pip, int index);
+void		bonus_ult_free(t_pip *pip, char **arg_list, int e);
+char		**bonus_arg_listeur(t_pip *pip, int index);
 #endif
