@@ -16,6 +16,8 @@ void	init_pip2(t_pip *pip)
 {
 	pip->fd[0] = open(pip->ptr[0], O_RDONLY);
 	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (pip->fd[1] == -1)
+		exit(1);
 	if (pipe(pip->pfd1) == -1)
 		exit(1);
 	if (pipe(pip->pfd1 + 2) == -1)
