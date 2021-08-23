@@ -60,7 +60,7 @@ void		print_error(char	*ptr);
 char		**arg_listeur(t_pip *pip, int index);
 char		*parse_path(char **arg_list, t_pip *pip);
 int			bonus_main(int argc, char *argv[], char *envp[], t_pip *pip);
-void		bonus_reader(t_pip *pip, int index, char *envp[]);
+int			bonus_reader(t_pip *pip, int index, char *envp[]);
 void		bonus_ult_free(t_pip *pip, char **arg_list, int e);
 int			bonus_piper(t_pip *pip, int index);
 char		**bonus_arg_listeur(t_pip *pip, int index);

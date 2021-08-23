@@ -64,7 +64,7 @@ void	bonus_closer(t_pip *pip, int index)
 		close(pip->pfd1[1]);
 	}
 }
-void	bonus_reader(t_pip *pip, int index, char *envp[])
+int		bonus_reader(t_pip *pip, int index, char *envp[])
 {
 	char	**arg_list;
 
@@ -85,4 +85,8 @@ void	bonus_reader(t_pip *pip, int index, char *envp[])
 	}
 	/* bonus_closer(pip, index); */
 	double_free(arg_list);
+	return (1);
+	/* if (index == argc - 3)
+
+	return(bonus_reader(pip, index + 1, envp)); */
 }

@@ -27,10 +27,6 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 		count++;
 	}
 	pip->b_ptr[count] = 0;
-	if (pipe(pip->pfd1) == -1)
-		exit(1);
-	if (pipe(pip->pfd1 + 2) == -1)
-		exit(1);
 	pip->fd[0] = open(pip->b_ptr[0], O_RDONLY);
 	pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	pip->b_pid = malloc(sizeof(int) *(argc));
@@ -39,6 +35,12 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 	count = 0;
 	while (count < argc)
 		pip->b_pid[count++] = -2;
+	if (pipe(pip->pfd1) == -1)
+		exit(1);
+	if (pipe(pip->pfd1 + 2) == -1)
+		exit(1);
+	if (pipe(pip->pfd1 + 4) == -1)
+		exit(1);
 }
 
 int	bonus_waiter_error(t_pip *pip, int index)
@@ -66,18 +68,22 @@ int	bonus_waiter_error(t_pip *pip, int index)
 
 int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 {
-	int		index;
+/* 	int		index; */
 
-	index = 1;
 	init_pip_bonus(pip, argv, argc);
-	bonus_reader(pip, 1, envp);
-	bonus_reader(pip, 2, envp);
-
-	index = 1;
+	int index = 1;
 	while (index < (argc - 2))
-		bonus_waiter_error(pip, index++);
-	double_free(pip->b_ptr);
+		index += bonus_reader(pip, index, envp);
+/* 	bonus_reader(pip, 1, envp); */
+/* 	bonus_reader(pip, 2, envp); */
+/* 	index = 1;
+	while (index < (argc - 2))
+	{
+		bonus_waiter_error(pip, index);
+		index++;
+	} */
+/* 	double_free(pip->b_ptr);
 	double_free(pip->pathptr);
-	double_free(pip->pwd);
+	double_free(pip->pwd); */
 	return (0);
 }
