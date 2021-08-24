@@ -12,31 +12,11 @@
 
 #include "../lib/libpip.h"
 
-void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
+void	init_pip_bonus2(t_pip *pip, int argc)
 {
-	int		count;
+	int	count;
 
 	pip->b_ac = argc;
-	pip->b_ptr = malloc(sizeof(char *) * (argc));
-	if (!pip->b_ptr)
-		ft_stop(pip, "malloc", NULL, 0);
-	count = 0;
-	while (count < (argc - 1))
-	{
-		pip->b_ptr[count] = copieur(argv[count + 1]);
-		count++;
-	}
-	pip->b_ptr[argc - 1] = 0;
-	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
-	{
-		pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_APPEND, 0777);
-		pip->fd[0] = -2;
-	}
-	else
-	{
-		pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-		pip->fd[0] = open(pip->b_ptr[0], O_RDONLY);
-	}
 	pip->b_pid = malloc(sizeof(int) *(argc));
 	if (!pip->b_pid)
 		ft_stop(pip, "malloc", NULL, 0);
@@ -56,6 +36,32 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 	bonus_checker_fd(pip);
 	if (pip->fd[0] == -1)
 		pip->fd[0] = 0;
+}
+
+void	init_pip_bonus(t_pip *pip, char *argv[], int argc, int count)
+{
+	pip->b_ptr = malloc(sizeof(char *) * (argc));
+	if (!pip->b_ptr)
+		ft_stop(pip, "malloc", NULL, 0);
+	while (count < (argc - 1))
+	{
+		pip->b_ptr[count] = copieur(argv[count + 1]);
+		count++;
+	}
+	pip->b_ptr[argc - 1] = 0;
+	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
+	{
+		pip->fd[1] = open(pip->b_ptr[argc - 2],
+				O_WRONLY | O_CREAT | O_APPEND, 0777);
+		pip->fd[0] = -2;
+	}
+	else
+	{
+		pip->fd[1] = open(pip->b_ptr[argc - 2],
+				O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		pip->fd[0] = open(pip->b_ptr[0], O_RDONLY);
+	}
+	return (init_pip_bonus2(pip, argc));
 }
 
 int	bonus_waiter_error(t_pip *pip, int index)
@@ -90,7 +96,7 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 {
 	int		index;
 
-	init_pip_bonus(pip, argv, argc);
+	init_pip_bonus(pip, argv, argc, 0);
 	index = 1;
 	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
 		index = bonus_here_doc(pip, envp);

@@ -99,11 +99,11 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 	{
 		printf("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)\n");
-		exit(1);	
+		exit (1);
 	}
 	envp_init(envp, &pip);
 	if (argc > 5 || !ft_memcmp(argv[1], "here_doc", 8))
-		return(bonus_main(argc, argv, envp, &pip));
+		return (bonus_main(argc, argv, envp, &pip));
 	init_pip(&pip, argv);
 	count2 = ft_reader(&pip, 1, 0, envp);
 	count = 0;
