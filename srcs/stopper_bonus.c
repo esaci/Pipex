@@ -2,6 +2,8 @@
 
 void	bonus_ult_free(t_pip *pip, char **arg_list, int e)
 {
+	if (access("./srcs/here_doc_file", F_OK) != -1)
+		unlink("./srcs/here_doc_file");
 	double_free(pip->pathptr);
 	double_free(pip->pwd);
 	if (arg_list)

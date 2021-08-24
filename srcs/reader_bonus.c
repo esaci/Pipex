@@ -36,35 +36,7 @@ char	**bonus_arg_listeur(t_pip *pip, int index)
 	ptr[0] = parse_path(ptr, pip);
 	return (ptr);
 }
-// (fd[0],1) (0, 3) (2, 5) (4, 7) ...
 
-void	bonus_closer(t_pip *pip, int index)
-{
-	int		value;
-
-	value = index % 3;
-	if (value == 0)
-	{
-		close(pip->b_pfd1[4]);
-		close(pip->b_pfd1[5]);
-		if (pipe(pip->b_pfd1 + 4) == -1)
-			exit(1);
-	}
-	if (value == 1)
-	{
-		close(pip->b_pfd1[0]);
-		close(pip->b_pfd1[1]);
-		if (pipe(pip->b_pfd1) == -1)
-			exit(1);
-	}
-	if (value == 2)
-	{
-		close(pip->b_pfd1[2]);
-		close(pip->b_pfd1[3]);
-		if (pipe(pip->b_pfd1 + 2) == -1)
-			exit(1);
-	}
-}
 int		bonus_reader(t_pip *pip, int index, char *envp[])
 {
 	char	**arg_list;
