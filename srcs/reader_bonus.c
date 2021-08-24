@@ -36,7 +36,7 @@ char	**bonus_arg_listeur(t_pip *pip, int index)
 	ptr[0] = parse_path(ptr, pip);
 	return (ptr);
 }
-// (0,3) (2, 5) (4, 1) (0, 3) (2, 5) ..
+// (fd[0],1) (0, 3) (2, 5) (4, 7) ...
 
 void	bonus_closer(t_pip *pip, int index)
 {

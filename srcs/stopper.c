@@ -27,23 +27,31 @@ int	ft_stop(t_pip *pip, char *str, char **arg_list, int mode)
 {
 	if (!ft_memcmp(str, "RNOTOK", 6))
 	{
+		if (access(pip->ptr[0], F_OK) != -1)
+			return (0);
 		pip->tmptr = merge_twoarray("no such file or directory: ", pip->ptr[0]);
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	if (!ft_memcmp(str, "FNOTOK", 6))
+	else if (!ft_memcmp(str, "FNOTOK", 6))
 	{
 		pip->tmptr = merge_twoarray("command not found: ", arg_list[0]);
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	if (!ft_memcmp(str, "XNOTOK", 6))
+	else if (!ft_memcmp(str, "XNOTOK", 6))
 	{
 		pip->tmptr = merge_twoarray("permission denied: ", arg_list[0]);
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	if (!ft_memcmp(str, "execve", 6))
+	else if (!ft_memcmp(str, "CMDNOINPUT", 10))
+	{
+		str = merge_twoarray("Wrong usage of command ", pip->ptr[mode]);
+		print_error(str);
+		free(str);
+	}
+	else if (!ft_memcmp(str, "execve", 6))
 		perror(pip->ptr[(mode - 1)*3]);
 	return (0);
 }
@@ -65,6 +73,7 @@ void	ult_free(t_pip *pip, char **arg_list, int e)
 {
 	double_free(pip->pathptr);
 	double_free(pip->pwd);
-	double_free(arg_list);
+	if (arg_list)
+		double_free(arg_list);
 	exit(e);
 }

@@ -14,16 +14,18 @@
 
 void	init_pip2(t_pip *pip)
 {
+	int		count;
+	char	*ptr;
+
 	pip->fd[0] = open(pip->ptr[0], O_RDONLY);
 	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (pip->fd[1] == -1)
-		ft_stop(pip, "fd", 0, 0);
+	checker_fd(pip);
 	if (pip->fd[0] == -1)
 		pip->fd[0] = 0;
 	if (pipe(pip->pfd1) == -1)
-		exit(1);
+		ult_free(pip, NULL, 1);
 	if (pipe(pip->pfd1 + 2) == -1)
-		exit(1);
+		ult_free(pip, NULL, 1);
 }
 
 void	init_pip(t_pip *pip, char **argv)
@@ -65,6 +67,7 @@ int	waiter_error(t_pip *pip, int index, int pid)
 	int		status;
 	char	**arg_list;
 
+	pip->tmp[0] = 0;
 	arg_list = arg_listeur(pip, index);
 	waitpid(pip->pid[pid], &status, 0);
 	if (WIFEXITED(status))
@@ -76,6 +79,8 @@ int	waiter_error(t_pip *pip, int index, int pid)
 			ft_stop(pip, "XNOTOK", arg_list, index);
 		else if (access(pip->ptr[0], R_OK) == -1 && index == 1)
 			ft_stop(pip, "RNOTOK", arg_list, index);
+		else if (pip->tmp[0] == 2)
+			ft_stop(pip, "CMDNOINPUT", arg_list, index);
 		else if (pip->tmp[0] != 0 && index == 1)
 			ft_stop(pip, "execve", arg_list, index);
 		else if (pip->tmp[0] == 127 && index == 2)
@@ -92,7 +97,10 @@ int	main(int argc, char *argv[], char *envp[])
 	int		count2;
 
 	if (argc < 5)
-		return (1);
+	{
+		printf("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)\n");
+		exit(1);	
+	}
 	envp_init(envp, &pip);
 	if (argc > 5)
 		return(bonus_main(argc, argv, envp, &pip));

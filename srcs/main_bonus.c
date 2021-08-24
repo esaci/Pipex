@@ -27,19 +27,20 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 		count++;
 	}
 	pip->b_ptr[argc - 1] = 0;
-	pip->fd[0] = open(pip->b_ptr[0], O_RDONLY);
-	pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (pip->fd[1] == -1)
-		bonus_stop(pip, "fd", 0, 0);
-	if (pip->fd[0] == -1)
-		pip->fd[0] = 0;
+	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
+		pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_APPEND, 0777);
+	else
+	{
+		pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		pip->fd[0] = open(pip->b_ptr[0], O_RDONLY);
+	}
 	pip->b_pid = malloc(sizeof(int) *(argc));
 	if (!pip->b_pid)
 		ft_stop(pip, "malloc", NULL, 0);
 	count = 0;
 	while (count < argc)
 		pip->b_pid[count++] = -2;
-	pip->b_pfd1 = malloc(sizeof(int) *((argc - 3) + 2));
+	pip->b_pfd1 = malloc(sizeof(int) *(((argc - 3) + 2) * 2));
 	count = 0;
 	if (!pip->b_pfd1)
 		ft_stop(pip, "malloc", NULL, 0);
@@ -49,6 +50,9 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 			bonus_stop(pip, "pipe", 0, 0);
 		count++;
 	}
+	bonus_checker_fd(pip);
+	if (pip->fd[0] == -1)
+		pip->fd[0] = 0;
 }
 
 int	bonus_waiter_error(t_pip *pip, int index)
@@ -56,6 +60,9 @@ int	bonus_waiter_error(t_pip *pip, int index)
 	int		status;
 	char	**arg_list;
 
+	pip->tmp[0] = 0;
+	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8) && index < 3)
+		return (pip->tmp[0]);
 	arg_list = bonus_arg_listeur(pip, index);
 	waitpid(pip->b_pid[index], &status, 0);
 	if (WIFEXITED(status))
@@ -67,6 +74,8 @@ int	bonus_waiter_error(t_pip *pip, int index)
 			bonus_stop(pip, "XNOTOK", arg_list, index);
 		else if (access(pip->b_ptr[0], R_OK) == -1 && index == 1)
 			bonus_stop(pip, "RNOTOK", arg_list, index);
+		else if (pip->tmp[0] == 2)
+			ft_stop(pip, "CMDNOINPUT", arg_list, index);
 		else if (pip->tmp[0] == 127)
 			bonus_stop(pip, "execve", arg_list, index);
 	}
@@ -80,11 +89,10 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 
 	init_pip_bonus(pip, argv, argc);
 	index = 1;
+	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
+		index = bonus_here_doc(pip, envp);
 	while (index < (argc - 2))
-	{
 		index += bonus_reader(pip, index, envp);
-		/* bonus_closer(pip, index); */
-	}
 	index = 1;
 	while (index < (argc - 3) * 2)
 		close(pip->b_pfd1[index++]);
@@ -98,5 +106,6 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 	double_free(pip->pathptr);
 	double_free(pip->pwd);
 	free(pip->b_pid);
+	free(pip->b_pfd1);
 	return (0);
 }
