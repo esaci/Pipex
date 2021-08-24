@@ -69,5 +69,6 @@ char		**bonus_arg_listeur(t_pip *pip, int index);
 void		bonus_closer(t_pip *pip, int index);
 int			bonus_stop(t_pip *pip, char *str, char **arg_list, int index);
 int			bonus_here_doc(t_pip *pip, char *envp[]);
+void    	bonus_here_close(t_pip *pip, char *envp[]);
 void    	bonus_checker_fd(t_pip *pip);
 #endif

@@ -16,6 +16,7 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 {
 	int		count;
 
+	pip->fd[0] = 0;
 	pip->b_ac = argc;
 	pip->b_ptr = malloc(sizeof(char *) * (argc));
 	if (!pip->b_ptr)
@@ -102,6 +103,8 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 		bonus_waiter_error(pip, index);
 		index++;
 	}
+	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
+		bonus_here_close(pip, envp);
 	double_free(pip->b_ptr);
 	double_free(pip->pathptr);
 	double_free(pip->pwd);
