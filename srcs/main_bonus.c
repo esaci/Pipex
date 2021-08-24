@@ -16,7 +16,6 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 {
 	int		count;
 
-	pip->fd[0] = 0;
 	pip->b_ac = argc;
 	pip->b_ptr = malloc(sizeof(char *) * (argc));
 	if (!pip->b_ptr)
@@ -29,7 +28,10 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 	}
 	pip->b_ptr[argc - 1] = 0;
 	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))
+	{
 		pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_APPEND, 0777);
+		pip->fd[0] = -2;
+	}
 	else
 	{
 		pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
