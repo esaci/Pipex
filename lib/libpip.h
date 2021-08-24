@@ -60,7 +60,7 @@ void		ult_free(t_pip *pip, char **arg_list, int e);
 void		print_error(char	*ptr);
 char		**arg_listeur(t_pip *pip, int index);
 char		*parse_path(char **arg_list, t_pip *pip);
-void    	checker_fd(t_pip *pip);
+void		checker_fd(t_pip *pip);
 int			bonus_main(int argc, char *argv[], char *envp[], t_pip *pip);
 int			bonus_reader(t_pip *pip, int index, char *envp[]);
 void		bonus_ult_free(t_pip *pip, char **arg_list, int e);
@@ -69,6 +69,6 @@ char		**bonus_arg_listeur(t_pip *pip, int index);
 void		bonus_closer(t_pip *pip, int index);
 int			bonus_stop(t_pip *pip, char *str, char **arg_list, int index);
 int			bonus_here_doc(t_pip *pip, char *envp[]);
-void    	bonus_here_close(t_pip *pip, char *envp[]);
-void    	bonus_checker_fd(t_pip *pip);
+void		bonus_here_close(t_pip *pip, char *envp[]);
+void		bonus_checker_fd(t_pip *pip);
 #endif

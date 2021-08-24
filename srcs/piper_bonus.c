@@ -3,7 +3,7 @@
 void	calcul_in_out(int index, int *in, int *out)
 {
 	*in = (index - 2) * 2;
-	*out = *in + 3; 
+	*out = *in + 3;
 }
 
 int	bonus_piper2(t_pip *pip, int index)
@@ -20,7 +20,7 @@ int	bonus_piper2(t_pip *pip, int index)
 			close(pip->b_pfd1[count++]);
 	return (0);
 }
-// (fd[0],1) (0, 3) (2, 5) (4, 7) ...
+
 int	bonus_piper(t_pip *pip, int index)
 {
 	int	count;
