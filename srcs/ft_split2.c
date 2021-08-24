@@ -64,7 +64,7 @@ char	*merge_twoarray(char *s, char *d)
 	return (ptr);
 }
 
-char	**ft_split3(char **d, char **s, int index, t_pip *pip)
+char	**ft_split3(char **d, char **s)
 {
 	int	count2;
 
@@ -78,13 +78,7 @@ char	**ft_split3(char **d, char **s, int index, t_pip *pip)
 	}
 	free(s[0]);
 	free(s);
-	if (index == 1 && pip->fd[0] == -1)
-	{
-		d[count2] = copieur(pip->ptr[0]);
-		d[++count2] = NULL;
-	}
-	else
-		d[count2] = NULL;
+	d[count2] = NULL;
 	return (d);
 }
 
@@ -93,11 +87,12 @@ char	**ft_split2(char **s, t_pip *pip, int index)
 	int		count;
 	char	**d;
 
+	index = 0;
 	count = len_double(s);
 	d = malloc(sizeof(char *) * (count + 2));
 	if (!d)
 		ft_stop(pip, "okok", NULL, 0);
-	d[0] = malloc(sizeof(char) * (ft_strlen(s[0]) + 2));
+	d[index] = malloc(sizeof(char) * (ft_strlen(s[0]) + 2));
 	if (!d[0])
 		ft_stop(pip, "okok", NULL, 0);
 	count = 0;
@@ -107,5 +102,5 @@ char	**ft_split2(char **s, t_pip *pip, int index)
 		count++;
 	}
 	d[0][++count] = 0;
-	return (ft_split3(d, s, index, pip));
+	return (ft_split3(d, s));
 }

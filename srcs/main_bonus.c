@@ -26,9 +26,13 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 		pip->b_ptr[count] = copieur(argv[count + 1]);
 		count++;
 	}
-	pip->b_ptr[count] = 0;
+	pip->b_ptr[argc - 1] = 0;
 	pip->fd[0] = open(pip->b_ptr[0], O_RDONLY);
 	pip->fd[1] = open(pip->b_ptr[argc - 2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (pip->fd[1] == -1)
+		bonus_stop(pip, "fd", 0, 0);
+	if (pip->fd[0] == -1)
+		pip->fd[0] = 0;
 	pip->b_pid = malloc(sizeof(int) *(argc));
 	if (!pip->b_pid)
 		ft_stop(pip, "malloc", NULL, 0);
@@ -47,26 +51,20 @@ int	bonus_waiter_error(t_pip *pip, int index)
 {
 	int		status;
 	char	**arg_list;
-	char	*ptr;
 
 	arg_list = bonus_arg_listeur(pip, index);
 	waitpid(pip->b_pid[index], &status, 0);
 	if (WIFEXITED(status))
 	{
 		pip->tmp[0] = WEXITSTATUS(status);
-		if (pip->tmp[0] != 0)
-		{
-			ptr = strerror(errno);
-			perror(ptr);
-		}
-		/* if (access(arg_list[0], F_OK) == -1)
-			ft_stop(pip, "FNOTOK", arg_list, index);
+		if (access(arg_list[0], F_OK) == -1)
+			bonus_stop(pip, "FNOTOK", arg_list, index);
 		else if (access(arg_list[0], X_OK) == -1)
-			ft_stop(pip, "XNOTOK", arg_list, index);
-		else if (access(pip->b_ptr[0], R_OK) == -1)
-			ft_stop(pip, "RNOTOK", arg_list, index);
-		else if (pip->tmp[0] != 0)
-			ft_stop(pip, "execve", arg_list, index); */
+			bonus_stop(pip, "XNOTOK", arg_list, index);
+		else if (access(pip->b_ptr[0], R_OK) == -1 && index == 1)
+			bonus_stop(pip, "RNOTOK", arg_list, index);
+		else if (pip->tmp[0] == 127)
+			bonus_stop(pip, "execve", arg_list, index);
 	}
 	double_free(arg_list);
 	return (pip->tmp[0]);
@@ -79,20 +77,22 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 	init_pip_bonus(pip, argv, argc);
 	index = 1;
 	while (index < (argc - 2))
+	{
 		index += bonus_reader(pip, index, envp);
+		bonus_closer(pip, index);
+	}
 	index = 1;
 	while (index < 6)
 		close(pip->pfd1[index++]);
-/* 	bonus_reader(pip, 1, envp); */
-/* 	bonus_reader(pip, 2, envp); */
-/* 	index = 1;
+	index = 1;
 	while (index < (argc - 2))
 	{
 		bonus_waiter_error(pip, index);
 		index++;
-	} */
-/* 	double_free(pip->b_ptr);
+	}
+	double_free(pip->b_ptr);
 	double_free(pip->pathptr);
-	double_free(pip->pwd); */
+	double_free(pip->pwd);
+	free(pip->b_pid);
 	return (0);
 }

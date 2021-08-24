@@ -65,4 +65,5 @@ void		bonus_ult_free(t_pip *pip, char **arg_list, int e);
 int			bonus_piper(t_pip *pip, int index);
 char		**bonus_arg_listeur(t_pip *pip, int index);
 void		bonus_closer(t_pip *pip, int index);
+int			bonus_stop(t_pip *pip, char *str, char **arg_list, int index);
 #endif

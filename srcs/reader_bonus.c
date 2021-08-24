@@ -36,6 +36,7 @@ char	**bonus_arg_listeur(t_pip *pip, int index)
 	ptr[0] = parse_path(ptr, pip);
 	return (ptr);
 }
+// (0,3) (2, 5) (4, 1) (0, 3) (2, 5) ..
 
 void	bonus_closer(t_pip *pip, int index)
 {
@@ -44,10 +45,10 @@ void	bonus_closer(t_pip *pip, int index)
 	value = index % 3;
 	if (value == 0)
 	{
-		if (pipe(pip->pfd1 + 4) == -1)
-			exit(1);
 		close(pip->pfd1[4]);
 		close(pip->pfd1[5]);
+		if (pipe(pip->pfd1 + 4) == -1)
+			exit(1);
 	}
 	if (value == 1)
 	{
@@ -58,10 +59,10 @@ void	bonus_closer(t_pip *pip, int index)
 	}
 	if (value == 2)
 	{
-		if (pipe(pip->pfd1 + 2) == -1)
-			exit(1);
 		close(pip->pfd1[2]);
 		close(pip->pfd1[3]);
+		if (pipe(pip->pfd1 + 2) == -1)
+			exit(1);
 	}
 }
 int		bonus_reader(t_pip *pip, int index, char *envp[])
@@ -76,17 +77,13 @@ int		bonus_reader(t_pip *pip, int index, char *envp[])
 		dup2(pip->tmp[1], 2);
 		close(pip->tmp[1]);
 		if (arg_list[0][0] != '/')
-			ult_free(pip, arg_list, 127);
+			bonus_ult_free(pip, arg_list, 127);
 		bonus_piper(pip, index);
-		if (access(pip->b_ptr[0], R_OK) == -1)
+		if (access(pip->b_ptr[0], R_OK) == -1 && index == 1)
 			bonus_ult_free(pip, arg_list, 1);
 		if (execve(arg_list[0], arg_list, envp) == -1)
 			bonus_ult_free(pip, arg_list, 1);
 	}
-	bonus_closer(pip, index);
 	double_free(arg_list);
 	return (1);
-	/* if (index == argc - 3)
-
-	return(bonus_reader(pip, index + 1, envp)); */
 }

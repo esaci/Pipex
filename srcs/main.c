@@ -17,7 +17,9 @@ void	init_pip2(t_pip *pip)
 	pip->fd[0] = open(pip->ptr[0], O_RDONLY);
 	pip->fd[1] = open(pip->ptr[3], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (pip->fd[1] == -1)
-		exit(1);
+		ft_stop(pip, "fd", 0, 0);
+	if (pip->fd[0] == -1)
+		pip->fd[0] = 0;
 	if (pipe(pip->pfd1) == -1)
 		exit(1);
 	if (pipe(pip->pfd1 + 2) == -1)
@@ -92,7 +94,7 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc < 5)
 		return (1);
 	envp_init(envp, &pip);
-	if (argc > 4)
+	if (argc > 5)
 		return(bonus_main(argc, argv, envp, &pip));
 	init_pip(&pip, argv);
 	count2 = ft_reader(&pip, 1, 0, envp);

@@ -25,7 +25,8 @@ SRC =	$(GNLD)get_next_line.c \
 		$(SRCD)executeur.c \
 		$(SRCD)piper.c \
 		$(SRCD)main_bonus.c \
-		$(SRCD)reader_bonus.c
+		$(SRCD)reader_bonus.c \
+		$(SRCD)stopper_bonus.c
 
 OBJ = $(SRC:.c=.o)
 

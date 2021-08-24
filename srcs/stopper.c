@@ -68,12 +68,3 @@ void	ult_free(t_pip *pip, char **arg_list, int e)
 	double_free(arg_list);
 	exit(e);
 }
-
-void	bonus_ult_free(t_pip *pip, char **arg_list, int e)
-{
-	double_free(pip->pathptr);
-	double_free(pip->pwd);
-	double_free(arg_list);
-	double_free(pip->b_ptr);
-	exit(e);
-}

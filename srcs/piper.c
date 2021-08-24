@@ -86,6 +86,7 @@ int	bonus_piper(t_pip *pip, int index)
 
 	if (index == 1)
 	{
+		close(pip->pfd1[4]);
 		dup2(pip->fd[0], STDIN_FILENO);
 		dup2(pip->pfd1[5], STDOUT_FILENO);
 		count = 0;
@@ -95,6 +96,7 @@ int	bonus_piper(t_pip *pip, int index)
 	}
 	else if (index == (pip->b_ac - 3))
 	{
+		close(pip->pfd1[5]);
 		dup2(pip->pfd1[((index % 3) * 2)], STDIN_FILENO);
 		dup2(pip->fd[1], STDOUT_FILENO);
 		count = 0;
