@@ -18,19 +18,24 @@ int	bonus_stop(t_pip *pip, char *str, char **arg_list, int index)
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	if (!ft_memcmp(str, "FNOTOK", 6))
+	else if (!ft_memcmp(str, "FNOTOK", 6))
 	{
 		pip->tmptr = merge_twoarray("command not found: ", arg_list[0]);
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	if (!ft_memcmp(str, "XNOTOK", 6))
+	else if (!ft_memcmp(str, "XNOTOK", 6))
 	{
 		pip->tmptr = merge_twoarray("permission denied: ", arg_list[0]);
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	if (!ft_memcmp(str, "execve", 6))
+	else if (!ft_memcmp(str, "execve", 6))
 		perror(pip->b_ptr[index]);
+    else
+    {
+        koi(str);
+        exit(1);
+    }
     return (index);
 }

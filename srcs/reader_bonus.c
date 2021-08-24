@@ -45,23 +45,23 @@ void	bonus_closer(t_pip *pip, int index)
 	value = index % 3;
 	if (value == 0)
 	{
-		close(pip->pfd1[4]);
-		close(pip->pfd1[5]);
-		if (pipe(pip->pfd1 + 4) == -1)
+		close(pip->b_pfd1[4]);
+		close(pip->b_pfd1[5]);
+		if (pipe(pip->b_pfd1 + 4) == -1)
 			exit(1);
 	}
 	if (value == 1)
 	{
-		close(pip->pfd1[0]);
-		close(pip->pfd1[1]);
-		if (pipe(pip->pfd1) == -1)
+		close(pip->b_pfd1[0]);
+		close(pip->b_pfd1[1]);
+		if (pipe(pip->b_pfd1) == -1)
 			exit(1);
 	}
 	if (value == 2)
 	{
-		close(pip->pfd1[2]);
-		close(pip->pfd1[3]);
-		if (pipe(pip->pfd1 + 2) == -1)
+		close(pip->b_pfd1[2]);
+		close(pip->b_pfd1[3]);
+		if (pipe(pip->b_pfd1 + 2) == -1)
 			exit(1);
 	}
 }

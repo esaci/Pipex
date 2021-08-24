@@ -39,12 +39,16 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc)
 	count = 0;
 	while (count < argc)
 		pip->b_pid[count++] = -2;
-	if (pipe(pip->pfd1) == -1)
-		exit(1);
-	if (pipe(pip->pfd1 + 2) == -1)
-		exit(1);
-	if (pipe(pip->pfd1 + 4) == -1)
-		exit(1);
+	pip->b_pfd1 = malloc(sizeof(int) *((argc - 3) + 2));
+	count = 0;
+	if (!pip->b_pfd1)
+		ft_stop(pip, "malloc", NULL, 0);
+	while (count < (argc - 3))
+	{
+		if (pipe(pip->b_pfd1 + (count * 2)) == -1)
+			bonus_stop(pip, "pipe", 0, 0);
+		count++;
+	}
 }
 
 int	bonus_waiter_error(t_pip *pip, int index)
@@ -79,11 +83,11 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 	while (index < (argc - 2))
 	{
 		index += bonus_reader(pip, index, envp);
-		bonus_closer(pip, index);
+		/* bonus_closer(pip, index); */
 	}
 	index = 1;
-	while (index < 6)
-		close(pip->pfd1[index++]);
+	while (index < (argc - 3) * 2)
+		close(pip->b_pfd1[index++]);
 	index = 1;
 	while (index < (argc - 2))
 	{

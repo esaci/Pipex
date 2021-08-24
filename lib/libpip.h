@@ -41,6 +41,7 @@ typedef struct s_pip
 	char	**b_ptr;
 	int		b_ac;
 	int		*b_pid;
+	int		*b_pfd1;
 }	t_pip;
 
 int			ft_reader(t_pip *pip, int index, int fdindex, char **envp);
