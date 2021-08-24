@@ -24,3 +24,14 @@ pid_t	forker(t_pip *pip)
 	}
 	return (pid);
 }
+
+void	koi(char *str)
+{
+	printf("|%s|\n", str);
+}
+
+void	print_error(char	*ptr)
+{
+	write(2, ptr, ft_strlen(ptr));
+	write(2, "\n", 1);
+}

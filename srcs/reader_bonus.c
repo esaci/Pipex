@@ -37,7 +37,7 @@ char	**bonus_arg_listeur(t_pip *pip, int index)
 	return (ptr);
 }
 
-int		bonus_reader(t_pip *pip, int index, char *envp[])
+int	bonus_reader(t_pip *pip, int index, char *envp[])
 {
 	char	**arg_list;
 

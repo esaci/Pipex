@@ -6,21 +6,23 @@
 /*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 14:40:14 by esaci             #+#    #+#             */
-/*   Updated: 2021/07/14 14:40:15 by esaci            ###   ########.fr       */
+/*   Updated: 2021/08/25 00:25:10 by esaci            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib/libpip.h"
 
-void	koi(char *str)
+int	ft_stop2(t_pip *pip, char *str, int mode)
 {
-	printf("|%s|\n", str);
-}
-
-void	print_error(char	*ptr)
-{
-	write(2, ptr, ft_strlen(ptr));
-	write(2, "\n", 1);
+	if (!ft_memcmp(str, "CMDNOINPUT", 10))
+	{
+		str = merge_twoarray("Wrong usage of command ", pip->ptr[mode]);
+		print_error(str);
+		free(str);
+	}
+	else if (!ft_memcmp(str, "execve", 6))
+		perror(pip->ptr[(mode - 1)*3]);
+	return (0);
 }
 
 int	ft_stop(t_pip *pip, char *str, char **arg_list, int mode)
@@ -45,14 +47,8 @@ int	ft_stop(t_pip *pip, char *str, char **arg_list, int mode)
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
-	else if (!ft_memcmp(str, "CMDNOINPUT", 10))
-	{
-		str = merge_twoarray("Wrong usage of command ", pip->ptr[mode]);
-		print_error(str);
-		free(str);
-	}
-	else if (!ft_memcmp(str, "execve", 6))
-		perror(pip->ptr[(mode - 1)*3]);
+	else
+		return (ft_stop2(pip, str, mode));
 	return (0);
 }
 

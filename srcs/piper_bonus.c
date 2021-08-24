@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   piper_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/25 00:19:17 by esaci             #+#    #+#             */
+/*   Updated: 2021/08/25 00:19:19 by esaci            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../lib/libpip.h"
 
 void	calcul_in_out(int index, int *in, int *out)
@@ -17,7 +29,7 @@ int	bonus_piper2(t_pip *pip, int index)
 	dup2(pip->b_pfd1[b_out], STDOUT_FILENO);
 	count = 0;
 	while (count < (pip->b_ac - 3) * 2)
-			close(pip->b_pfd1[count++]);
+		close(pip->b_pfd1[count++]);
 	return (0);
 }
 
@@ -36,7 +48,7 @@ int	bonus_piper(t_pip *pip, int index)
 	}
 	else if (index == (pip->b_ac - 3))
 	{
-		dup2(pip->b_pfd1[(index - 2) * 2], STDIN_FILENO);
+		dup2(pip->b_pfd1[(index - 2) *2], STDIN_FILENO);
 		dup2(pip->fd[1], STDOUT_FILENO);
 		count = 0;
 		while (count < (pip->b_ac - 3) * 2)
