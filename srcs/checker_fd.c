@@ -15,10 +15,12 @@
 void	checker_fd(t_pip *pip)
 {
 	int		count;
+	int		count2;
 	char	*ptr;
 
 	count = access(pip->ptr[0], R_OK);
-	if (count == -1)
+	count2 = access(pip->ptr[0], F_OK);
+	if (count == -1 && count2 != -1)
 	{
 		ptr = merge_twoarray("permission non accordée: ", pip->ptr[0]);
 		print_error(ptr);
@@ -38,12 +40,14 @@ void	bonus_checker_fd(t_pip *pip)
 {
 	int		count;
 	char	*ptr;
+	int		count2;
 
 	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8)
 		&& ft_strlen(pip->b_ptr[0]) == 8)
 		return ;
 	count = access(pip->b_ptr[0], R_OK);
-	if (count == -1)
+	count2 = access(pip->b_ptr[0], F_OK);
+	if (count == -1 && count2 != -1)
 	{
 		ptr = merge_twoarray("permission non accordée: ", pip->b_ptr[0]);
 		print_error(ptr);
