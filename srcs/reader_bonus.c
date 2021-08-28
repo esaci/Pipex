@@ -50,6 +50,8 @@ int	bonus_reader(t_pip *pip, int index, char *envp[])
 		close(pip->tmp[1]);
 		if (arg_list[0][0] != '/')
 			bonus_ult_free(pip, arg_list, 127);
+		if (access(arg_list[0], X_OK) == -1)
+			bonus_ult_free(pip, arg_list, 126);
 		bonus_piper(pip, index);
 		if (access(pip->b_ptr[0], R_OK) == -1 && index == 1)
 			bonus_ult_free(pip, arg_list, 1);
