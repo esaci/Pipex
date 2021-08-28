@@ -64,7 +64,7 @@ $(NAME) :	$(OBJ) $(SRCD)/main.c
 bonus: $(NAME2)
 
 $(NAME2) :	$(OBJ2) $(SRCD)/main2_bonus.c
-			rm -rf $(NAME2)
+			rm -rf $(NAME)
 			make -C $(LIBFTD)
 			cp $(LIBFTD)$(LIBFT) $(PIPD)$(PIP)
 			ar rc $(PIPD)$(PIP) $(OBJ2)

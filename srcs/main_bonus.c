@@ -83,6 +83,8 @@ int	bonus_waiter_error(t_pip *pip, int index)
 			bonus_stop(pip, "XNOTOK", arg_list, index);
 		else if (access(pip->b_ptr[0], R_OK) == -1 && index == 1)
 			bonus_stop(pip, "RNOTOK", arg_list, index);
+		else if (pip->tmp[0] == 126)
+			bonus_stop(pip, "CMDRNOTOK", arg_list, index);
 		else if (pip->tmp[0] == 2)
 			ft_stop(pip, "CMDNOINPUT", arg_list, index);
 		else if (pip->tmp[0] == 127)
