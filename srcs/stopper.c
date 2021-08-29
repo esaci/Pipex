@@ -16,7 +16,7 @@ int	ft_stop2(t_pip *pip, char *str, int mode)
 {
 	if (!ft_memcmp(str, "CMDNOINPUT", 10))
 	{
-		str = merge_twoarray("Wrong usage of command ", pip->ptr[mode]);
+		str = merge_twoarray("Wrong usage of command: ", pip->ptr[mode]);
 		print_error(str);
 		free(str);
 	}
@@ -26,8 +26,6 @@ int	ft_stop2(t_pip *pip, char *str, int mode)
 		print_error(str);
 		free(str);
 	}
-	else if (!ft_memcmp(str, "execve", 6))
-		perror(pip->ptr[(mode - 1)*3]);
 	return (0);
 }
 

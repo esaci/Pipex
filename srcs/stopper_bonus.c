@@ -34,6 +34,12 @@ int	bonus_stop2(t_pip *pip, char *str, char **arg_list, int index)
 		print_error(pip->tmptr);
 		free(pip->tmptr);
 	}
+	else if (!ft_memcmp(str, "CMDNOINPUT", 10))
+	{
+		str = merge_twoarray("Wrong usage of command: ", pip->b_ptr[index]);
+		print_error(str);
+		free(str);
+	}
 	else if (!ft_memcmp(str, "CMDRNOTOK", 10))
 	{
 		str = merge_twoarray("permission denied: ", pip->ptr[index]);

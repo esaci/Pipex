@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libpip.h                                           :+:      :+:    :+:   */
+/*   libpip_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esaci <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/12 14:38:47 by esaci             #+#    #+#             */
-/*   Updated: 2021/07/12 14:38:49 by esaci            ###   ########.fr       */
+/*   Created: 2021/08/29 14:11:49 by esaci             #+#    #+#             */
+/*   Updated: 2021/08/29 14:12:06 by esaci            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBPIP_H
-# define LIBPIP_H
+#ifndef LIBPIP_BONUS_H
+# define LIBPIP_BONUS_H
 
 # include <unistd.h>
 # include <sys/types.h>

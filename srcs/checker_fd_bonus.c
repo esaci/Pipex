@@ -12,30 +12,6 @@
 
 #include "../lib/libpip.h"
 
-void	checker_fd(t_pip *pip)
-{
-	int		count;
-	int		count2;
-	char	*ptr;
-
-	count = access(pip->ptr[0], R_OK);
-	count2 = access(pip->ptr[0], F_OK);
-	if (count == -1 && count2 != -1)
-	{
-		ptr = merge_twoarray("permission non accordée: ", pip->ptr[0]);
-		print_error(ptr);
-		free(ptr);
-	}
-	count = access(pip->ptr[3], W_OK);
-	if (pip->fd[1] == -1 || count == -1)
-	{
-		ptr = merge_twoarray("permission non accordée: ", pip->ptr[3]);
-		print_error(ptr);
-		free(ptr);
-		ult_free(pip, 0, 1);
-	}
-}
-
 void	bonus_checker_fd(t_pip *pip)
 {
 	int		count;
@@ -49,14 +25,14 @@ void	bonus_checker_fd(t_pip *pip)
 	count2 = access(pip->b_ptr[0], F_OK);
 	if (count == -1 && count2 != -1)
 	{
-		ptr = merge_twoarray("permission non accordée: ", pip->b_ptr[0]);
+		ptr = merge_twoarray("permission denied: ", pip->b_ptr[0]);
 		print_error(ptr);
 		free(ptr);
 	}
 	count = access(pip->b_ptr[pip->b_ac - 2], W_OK);
-	if (pip->fd[1] == -1 || count == -1)
+	if (count == -1)
 	{
-		ptr = merge_twoarray("permission non accordée: ",
+		ptr = merge_twoarray("permission denied: ",
 				pip->b_ptr[pip->b_ac - 2]);
 		print_error(ptr);
 		free(ptr);

@@ -21,6 +21,11 @@ char	*parse_path2(char **arg_list, t_pip *pip)
 	tmp = access(ptr, F_OK);
 	if (tmp == 0)
 	{
+		if (arg_list[0][1] == '.')
+		{
+			free(ptr);
+			ptr = ft_strjoin(pip->pwd[0], arg_list[0] + 2);
+		}
 		free(arg_list[0]);
 		return (ptr);
 	}

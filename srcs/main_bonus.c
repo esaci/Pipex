@@ -64,19 +64,16 @@ void	init_pip_bonus(t_pip *pip, char *argv[], int argc, int count)
 	return (init_pip_bonus2(pip, argc));
 }
 
-int	bonus_waiter_error(t_pip *pip, int index)
+int	bonus_waiter_error(t_pip *pip, int index, char	**arg_list)
 {
-	int		status;
-	char	**arg_list;
-
 	pip->tmp[0] = 0;
 	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8) && index < 3)
 		return (pip->tmp[0]);
 	arg_list = bonus_arg_listeur(pip, index);
-	waitpid(pip->b_pid[index], &status, 0);
-	if (WIFEXITED(status))
+	waitpid(pip->b_pid[index], &pip->tmp[1], 0);
+	if (WIFEXITED(pip->tmp[1]))
 	{
-		pip->tmp[0] = WEXITSTATUS(status);
+		pip->tmp[0] = WEXITSTATUS(pip->tmp[1]);
 		if (access(arg_list[0], F_OK) == -1)
 			bonus_stop(pip, "FNOTOK", arg_list, index);
 		else if (access(arg_list[0], X_OK) == -1)
@@ -86,7 +83,7 @@ int	bonus_waiter_error(t_pip *pip, int index)
 		else if (pip->tmp[0] == 126)
 			bonus_stop(pip, "CMDRNOTOK", arg_list, index);
 		else if (pip->tmp[0] == 2)
-			ft_stop(pip, "CMDNOINPUT", arg_list, index);
+			bonus_stop(pip, "CMDNOINPUT", arg_list, index);
 		else if (pip->tmp[0] == 127)
 			bonus_stop(pip, "execve", arg_list, index);
 	}
@@ -110,7 +107,7 @@ int	bonus_main(int argc, char *argv[], char *envp[], t_pip *pip)
 	index = 1;
 	while (index < (argc - 2))
 	{
-		bonus_waiter_error(pip, index);
+		bonus_waiter_error(pip, index, NULL);
 		index++;
 	}
 	if (!ft_memcmp(pip->b_ptr[0], "here_doc", 8))

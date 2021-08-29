@@ -98,8 +98,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc < 5)
 	{
-		printf("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)\n");
-		exit (1);
+		print_error("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)");
+		exit (2);
 	}
 	envp_init(envp, &pip);
 	if (argc > 5 || !ft_memcmp(argv[1], "here_doc", 8))

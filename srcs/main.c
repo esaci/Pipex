@@ -62,17 +62,14 @@ void	envp_init(char **envp, t_pip *pip)
 	}
 }
 
-int	waiter_error(t_pip *pip, int index, int pid)
+int	waiter_error(t_pip *pip, int index, int pid, char **arg_list)
 {
-	int		status;
-	char	**arg_list;
-
 	pip->tmp[0] = 0;
 	arg_list = arg_listeur(pip, index);
-	waitpid(pip->pid[pid], &status, 0);
-	if (WIFEXITED(status))
+	waitpid(pip->pid[pid], &pip->tmp[1], 0);
+	if (WIFEXITED(pip->tmp[1]))
 	{
-		pip->tmp[0] = WEXITSTATUS(status);
+		pip->tmp[0] = WEXITSTATUS(pip->tmp[1]);
 		if (access(arg_list[0], F_OK) == -1)
 			ft_stop(pip, "FNOTOK", arg_list, index);
 		else if (access(arg_list[0], X_OK) == -1)
@@ -100,8 +97,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc != 5)
 	{
-		printf("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)\n");
-		exit (1);
+		print_error("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)");
+		exit (2);
 	}
 	envp_init(envp, &pip);
 	init_pip(&pip, argv);
@@ -109,8 +106,8 @@ int	main(int argc, char *argv[], char *envp[])
 	count = 0;
 	while (count < 4)
 		close(pip.pfd1[count++]);
-	waiter_error(&pip, 1, 0);
-	waiter_error(&pip, 2, 1);
+	waiter_error(&pip, 1, 0, NULL);
+	waiter_error(&pip, 2, 1, NULL);
 	double_free(pip.pathptr);
 	double_free(pip.pwd);
 	return (pip.tmp[0]);
