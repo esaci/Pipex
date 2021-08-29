@@ -97,7 +97,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc != 5)
 	{
-		print_error("Format: Pipex(Infile, cmd1, cmd2, .., cmdn, Outfile)");
+		print_error("Format: Pipex(Infile, cmd1, cmd2, Outfile)");
 		exit (2);
 	}
 	envp_init(envp, &pip);
