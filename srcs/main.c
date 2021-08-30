@@ -95,7 +95,7 @@ int	main(int argc, char *argv[], char *envp[])
 	int		count;
 	int		count2;
 
-	if (argc != 5)
+	if (argc != 5 || !envp)
 	{
 		print_error("Format: Pipex(Infile, cmd1, cmd2, Outfile)");
 		exit (2);
