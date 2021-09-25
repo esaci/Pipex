@@ -48,7 +48,7 @@ int	bonus_piper(t_pip *pip, int index)
 	}
 	else if (index == (pip->b_ac - 3))
 	{
-		dup2(pip->b_pfd1[(index - 2) *2], STDIN_FILENO);
+		dup2(pip->b_pfd1[(index - 2) * 2], STDIN_FILENO);
 		dup2(pip->fd[1], STDOUT_FILENO);
 		count = 0;
 		while (count < (pip->b_ac - 3) * 2)
